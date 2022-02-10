@@ -424,7 +424,7 @@
 <style>
 	page,
 	body {
-		padding-bottom: 167upx;
+		/* padding-bottom: 167upx; */
 	}
 </style>
 <style lang="scss" scoped>
