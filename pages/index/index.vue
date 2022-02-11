@@ -1,12 +1,17 @@
 <template>
 	<view class="warps" :class="[$tm.vx.state().tmVuetify.black ? 'black' : 'grey-lighten-4']">
-		<tm-menubars title=" " color="pink" :showback="false"></tm-menubars>
+		<tm-menubars :title="menuTitle" color="pink" :showback="false" :flat="true">
+			<template v-slot:left>
+				<view class="pl-10 text-size-g py-1">诚信商城</view>
+			</template>
+		</tm-menubars>
 		
 		<view class="center_warp" :style="{height: bodyHeight}">
 			<home v-if="tabIndex == 0" style="height: 100%;"></home>
 			<classify v-else-if="tabIndex == 1"></classify>
+			<news v-else-if="tabIndex == 2"></news>
 			<cart v-else-if="tabIndex == 3"></cart>
-			<my v-else="tabIndex == 4"></my>
+			<my v-else-if="tabIndex == 4"></my>
 		</view>
 
 		<tm-bottomnavigation class="tabbar" icon-color="pink" icon-color-grey="grey-lighten-1" :list="tabbar" 
@@ -17,14 +22,16 @@
 <script>
 	import Home from './home.vue'
 	import Classify from './classify.vue'
+	import News from './news.vue'
 	import Cart from './cart.vue'
 	import My from './my.vue'
 	export default {
-		components: { Home, Classify, Cart, My},
+		components: { Home, Classify, News, Cart, My},
 		data() {
 			return {
 				bodyHeight: '100%',
-				tabIndex: 0,
+				menuTitle: '首页',
+				tabIndex: 4,
 				tabbar: [{
 						icon: 'icon-position-fill',
 						value: '首页',
@@ -39,7 +46,7 @@
 						icon: 'icon-clock-fill',
 						iconSize: 70,
 						fontSize: 25,
-						value: '特选',
+						value: '消息',
 						custom: true,
 						customColor: 'pink',
 						customFontColor: 'white'
@@ -69,6 +76,7 @@
 			// 选中tab回调事件
 			tabBarChange(e) {
 				this.tabIndex = e.index;
+				this.menuTitle = e.item.value;
 			}
 		}
 	};
