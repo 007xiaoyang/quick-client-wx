@@ -17,4 +17,12 @@
 	@import "./tm-vuetify/mian.min.css";
 	/* 主题包 */
 	@import "./tm-vuetify/scss/theme.css";
+	
+	.hidden {
+		overflow: hidden;
+	}
+	.scroll {
+		overflow: auto;
+		height: 100%;
+	}
 </style>

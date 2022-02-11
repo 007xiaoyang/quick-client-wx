@@ -1,5 +1,5 @@
 <template>
-	<view class="fulled-height cart-hieght">
+	<view class="fulled-height cart-hieght hidden">
 		<view class="scroll">
 			<tm-sheet v-for="(item,index) in 10" :key="index" margin="0" color="bg-gradient-blue-accent">
 				<view class="text-size-s text-weight-b mb-24">
@@ -41,10 +41,5 @@
 <style lang="scss"> 
 	.cart-hieght {
 		height: calc(100% - 100rpx);
-		overflow: hidden;
-		.scroll {
-			overflow: auto;
-			height: 100%;
-		}
 	}
 </style>
