@@ -7,11 +7,11 @@
 		</tm-menubars>
 		
 		<view class="center_warp" :style="{height: bodyHeight}">
-			<home v-if="tabIndex == 0" style="height: 100%;"></home>
-			<classify v-else-if="tabIndex == 1"></classify>
-			<news v-else-if="tabIndex == 2"></news>
-			<cart v-else-if="tabIndex == 3"></cart>
-			<my v-else-if="tabIndex == 4"></my>
+			<home v-if="tabIndex == 0" class="fulled-height"></home>
+			<classify v-else-if="tabIndex == 1" class="fulled-height"></classify>
+			<news v-else-if="tabIndex == 2" class="fulled-height"></news>
+			<cart v-else-if="tabIndex == 3" class="fulled-height" :bottom="cardBar"></cart>
+			<my v-else-if="tabIndex == 4" class="fulled-height"></my>
 		</view>
 
 		<tm-bottomnavigation class="tabbar" icon-color="pink" icon-color-grey="grey-lighten-1" :list="tabbar" 
@@ -30,6 +30,7 @@
 		data() {
 			return {
 				bodyHeight: '100%',
+				cardBar: 0,
 				menuTitle: '首页',
 				tabIndex: 4,
 				tabbar: [{
@@ -44,12 +45,12 @@
 					},
 					{
 						icon: 'icon-clock-fill',
-						iconSize: 70,
 						fontSize: 25,
 						value: '消息',
-						custom: true,
+						/* custom: true,
+						iconSize: 70,
 						customColor: 'pink',
-						customFontColor: 'white'
+						customFontColor: 'white' */
 					},
 					{
 						icon: 'icon-clock-fill',
@@ -66,6 +67,7 @@
 		},
 		created() {
 			let sys = uni.getSystemInfoSync();
+			this.cardBar = ((sys.screenHeight - sys.safeArea.bottom) + uni.upx2px(52 + 45));
 			this.bodyHeight = (sys.screenHeight - ((sys.screenHeight - sys.safeArea.bottom) + (sys.statusBarHeight + 45)) - uni.upx2px(52 + 45)) + 'px';
 		},
 		onLoad(option) {

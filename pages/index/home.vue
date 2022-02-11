@@ -28,10 +28,10 @@
 			
 			<!-- 数据列表 -->
 			<tm-sheet v-for="(item,index) in 10" :key="index" color="bg-gradient-blue-accent">
-						<view class="text-size-s text-weight-b mb-24">
-							这是所有组件基础的容器，它可以任意改变属性，就像一张纸一样。
-						</view>
-					</tm-sheet>
+				<view class="text-size-s text-weight-b mb-24">
+					这是所有组件基础的容器，它可以任意改变属性，就像一张纸一样。
+				</view>
+			</tm-sheet>
 		</mescroll-uni>
 	</view>
 </template>
