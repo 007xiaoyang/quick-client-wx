@@ -18,7 +18,7 @@
 				border?'border-a-1':''
 			]"
 		>
-			<view :class="['px-' + pz_themeCus.padding[0], 'py-' + pz_themeCus.padding[1]]">
+			<view :class="['px-' + pz_themeCus.padding[0], 'py-' + pz_themeCus.padding[1], textOverflow]">
 				<view class="flex-between ">
 					<view class="left flex-start ">
 						<view class="left-tm-content mr-16 flex-center" v-if="showLeftIcon">
@@ -248,6 +248,10 @@ export default {
 		fllowTheme:{
 			type:Boolean|String,
 			default:true
+		},
+		textOverflow: {
+			type: String,
+			default: ''
 		}
 	},
 	computed: {

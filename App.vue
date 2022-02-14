@@ -21,6 +21,11 @@
 	.hidden {
 		overflow: hidden;
 	}
+	.text-overflow {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 	.scroll {
 		overflow: auto;
 		height: 100%;

@@ -1,8 +1,9 @@
 <template>
-	<view class="tm-search fulled py-12"
+	<view class="tm-search fulled"
 	:class="[
 		black_tmeme?'grey-darken-5':bgColor,
-		`shadow-${shadow}`
+		`shadow-${shadow}`,
+		padding
 	]"
 	>
 		<view class="tm-search-body flex-around">
@@ -159,6 +160,10 @@
 			fllowTheme:{
 				type:Boolean|String,
 				default:true
+			},
+			padding: {
+				type: String,
+				default: 'py-12'
 			}
 		},
 		computed:{

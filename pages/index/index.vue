@@ -6,7 +6,7 @@
 			</template>
 		</tm-menubars>
 		
-		<view class="center_warp" :style="{height: bodyHeight}">
+		<view class="center_warp" :style="{height: bodyHeight + 'px'}">
 			<home v-if="tabIndex == 0" class="fulled-height"></home>
 			<classify v-else-if="tabIndex == 1" class="fulled-height"></classify>
 			<news v-else-if="tabIndex == 2" class="fulled-height"></news>
@@ -32,7 +32,7 @@
 				bodyHeight: '100%',
 				cardBar: 0,
 				menuTitle: '首页',
-				tabIndex: 4,
+				tabIndex: 1,
 				tabbar: [{
 						icon: 'icon-position-fill',
 						value: '首页',
@@ -67,8 +67,8 @@
 		},
 		created() {
 			let sys = uni.getSystemInfoSync();
-			this.cardBar = ((sys.screenHeight - sys.safeArea.bottom) + uni.upx2px(52 + 45));
-			this.bodyHeight = (sys.screenHeight - ((sys.screenHeight - sys.safeArea.bottom) + (sys.statusBarHeight + 45)) - uni.upx2px(52 + 45)) + 'px';
+			this.cardBar = ((sys.screenHeight - sys.safeArea.bottom) + uni.upx2px(52 + 46));
+			this.bodyHeight = (sys.screenHeight - ((sys.screenHeight - sys.safeArea.bottom) + (sys.statusBarHeight + 45)) - uni.upx2px(52 + 46));
 		},
 		onLoad(option) {
 			console.log(option)

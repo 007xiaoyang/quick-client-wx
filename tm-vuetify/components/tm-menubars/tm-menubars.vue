@@ -10,7 +10,7 @@
 			]">
 			<view :style="{ height: tabHeight }"></view>
 			<view class="body_wk flex-between">
-				<view class="left flex-start">
+				<view class="left flex-start" v-if="leftNode">
 					<block v-if="showback">
 						<view v-if="pageUrl && isHome == false" class="home-btn mr-20 text flex-center flex-shrink"
 							:class="[color_tmeme,black_tmeme ? 'outlined bk' : '']">
@@ -119,6 +119,10 @@
 			},
 			// 跟随主题色的改变而改变。
 			fllowTheme: {
+				type: Boolean | String,
+				default: true
+			},
+			leftNode: {
 				type: Boolean | String,
 				default: true
 			}

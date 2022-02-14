@@ -22,7 +22,8 @@
 				position,
 				border === 'top' ? 'border-t-1' : '',
 				border === 'bottom' ? 'border-b-1' : '',
-				'sheetIDX'
+				'sheetIDX',
+				padding
 			]"
 		>
 			<view class="tm-cartBarFood-list white "
@@ -65,21 +66,29 @@
 				
 				]" class=" flex-between tm-cartBarFood-wk">
 				<view class="flex-start">
-					<view  @click="openlistfun" class="tm-cartBarFood-body px-32">
-						<tm-badges  :offset="[10,-5]" v-if="sum.num > 0" :dot="false" :label="sum.num"></tm-badges>
-						<view :class="[openList?'ani':'']">
-							<tm-icons :black="black_tmeme"  :color="list.length > 0&&disabled==false ? color : colorGrey" :size="60" name="icon-shopping-cart-fill"></tm-icons>
-						</view>
-					</view>
-					<view class="flex flex-col">
-						<view class="text-weight-b" :class="[`text-${color}`]">
-							<text class="text-size-xs">￥</text>
-							<text class="text-size-lg">{{ sum.price }}</text>
-						</view>
-						<view v-if="label!=''&&label.length>0&&label!=true&&label!='true'" class="text-size-xs text-grey">{{label}}</view>
-					</view>
+					<slot>
+						<slot name="left">
+							<view  @click="openlistfun" class="tm-cartBarFood-body px-32">
+								<tm-badges  :offset="[10,-5]" v-if="sum.num > 0" :dot="false" :label="sum.num"></tm-badges>
+								<view :class="[openList?'ani':'']">
+									<tm-icons :black="black_tmeme"  :color="list.length > 0&&disabled==false ? color : colorGrey" :size="60" name="icon-shopping-cart-fill"></tm-icons>
+								</view>
+							</view>
+						</slot>
+						<slot name="center">
+							<view class="flex flex-col">
+								<view class="text-weight-b" :class="[`text-${color}`, 'flex-center']">
+									<text class="text-size-xs">￥</text>
+									<text class="text-size-lg">{{ sum.price }}</text>
+								</view>
+								<view v-if="label!=''&&label.length>0&&label!=true&&label!='true'" class="text-size-xs text-grey">{{label}}</view>
+							</view>
+						</slot>
+					</slot>
 				</view>
-				<view class="pr-16"><tm-button :black="black_tmeme" @click="confirm" size="n" :theme="list.length > 0&&disabled==false ? btnColor : colorGrey" font-color="white" round="24">{{btnText}}</tm-button></view>
+				<view class="pr-16">
+					<slot name="btn" :btnText="btnText"><tm-button :black="black_tmeme" @click="confirm" size="n" :theme="list.length > 0&&disabled==false ? btnColor : colorGrey" font-color="white" round="24">{{btnText}}</tm-button></slot>
+				</view>
 			</view>
 			<!-- 安全区域的高度。 -->
 			<view v-if="safe" class="safe--hei " :class="[
@@ -211,7 +220,12 @@
 		//价格下方的说明。
 		label:{
 			type:String,
-			default:'注意选择的超市哦'
+			default:''
+		},
+		// 内边距样式
+		padding: {
+			type: String,
+			default: ''
 		}
 	},
 	watch: {

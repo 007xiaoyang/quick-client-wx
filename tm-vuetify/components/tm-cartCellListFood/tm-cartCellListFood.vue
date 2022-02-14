@@ -5,7 +5,9 @@
 		black_tmeme ? 'bk' : '',
 		border === 'top' ? 'border-t-1' : '',
 		border === 'bottom' ? 'border-b-1' : '',
+		round
 	]">
+		<slot></slot>
 		<view v-if="mdata[keyMap['img']]" class="tm-cartCellListFood-img" :style="{
 			width:imgWidth+'rpx',
 			height:imgWidth+'rpx'
@@ -106,7 +108,8 @@
 						salePrice:'salePrice',
 						saleLabel:'saleLabel',
 						unit:'unit',
-						buy:'buy'
+						buy:'buy',
+						checkbox: 'checkbox'
 					}
 				}
 			},
@@ -144,6 +147,10 @@
 					// }
 					return {};
 				}
+			},
+			round: {
+				type: String,
+				default: 'round-5'
 			}
 		},
 		watch:{

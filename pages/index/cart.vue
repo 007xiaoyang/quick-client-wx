@@ -1,18 +1,39 @@
 <template>
-	<view class="fulled-height cart-hieght hidden">
+	<view class="fulled-height cart-hieght hidden grey-lighten-3">
 		<view class="scroll">
-			<tm-sheet v-for="(item,index) in 10" :key="index" margin="0" color="bg-gradient-blue-accent">
-				<view class="text-size-s text-weight-b mb-24">
-					{{index}}这是所有组件基础的容器，它可以任意改变属性，就像一张纸一样。
-				</view>
-			</tm-sheet>
+			<mescroll-uni :fixed="false" ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
+				<tm-sheet margin="0" round="0" :padding="[0 , 0]" color="grey-lighten-3" shadow="0">
+					<tm-sheet v-for="(item,index) in cartbar" :key="index" color="" padding="0">
+						<tm-cartCellListFood border="" :mdata="item" :cart-num.sync="item.buy">
+							<template>
+								<tm-checkbox border-color="pink" color="bg-gradient-pink-accent" v-model="item.checkbox" model="round" round="rounded"></tm-checkbox>
+							</template>
+						</tm-cartCellListFood>
+					</tm-sheet>
+				</tm-sheet>
+			</mescroll-uni>
 		</view>
-		<tm-cartBarFood :bottom="bottom" :safe="false" color="blue" btnColor="bg-gradient-red-accent" :list="cartbar"></tm-cartBarFood>
+		<tm-cartBarFood :bottom="bottom" :safe="false" padding="pb-20" color="blue" btnColor="bg-gradient-red-accent" :list="cartbar" >
+			<template v-slot>
+				<tm-checkbox border-color="pink" color="bg-gradient-pink-accent" v-model="checked" label="全选" model="round" round="rounded"></tm-checkbox>
+				<view class="flex flex-col">
+					<view class="text-weight-b text-pink flex-center">
+						<text class="text-size-xs">￥</text>
+						<text class="text-size-lg">0</text>
+					</view>
+				</view>
+			</template>
+			<template v-slot:btn>
+				<tm-button size="n" font-color="white" :theme="cartbar.length > 0 ? 'pink' : 'grey'" round="24">去结算</tm-button>
+			</template>
+		</tm-cartBarFood>
 	</view>
 </template>
 
 <script>
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
 	export default {
+		mixins:[MescrollMixin],
 		props: {
 			bottom: {
 				type: Boolean|String,
@@ -21,6 +42,7 @@
 		},
 		data() {
 			return {
+				checked: false,
 				cartbar: [{
 				img: 'https://picsum.photos/300?k=1',
 				title: '产品3（任选）',
@@ -31,8 +53,15 @@
 				unit: '/斤',
 				id: 3,
 				buy: 0,
-				itemId: 0
+				itemId: 0,
+				checkbox: true
 			}]
+			}
+		},
+		methods: {
+			upCallback(page) {
+				// tabs异步获取
+				this.mescroll.endSuccess(1);
 			}
 		}
 	}
@@ -40,6 +69,6 @@
 
 <style lang="scss"> 
 	.cart-hieght {
-		height: calc(100% - 100rpx);
+		height: calc(100% - 120rpx);
 	}
 </style>
