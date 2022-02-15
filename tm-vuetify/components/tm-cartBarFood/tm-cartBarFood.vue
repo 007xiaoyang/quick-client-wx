@@ -66,7 +66,7 @@
 				
 				]" class=" flex-between tm-cartBarFood-wk">
 				<view class="flex-start">
-					<slot>
+					<slot name="default">
 						<slot name="left">
 							<view  @click="openlistfun" class="tm-cartBarFood-body px-32">
 								<tm-badges  :offset="[10,-5]" v-if="sum.num > 0" :dot="false" :label="sum.num"></tm-badges>

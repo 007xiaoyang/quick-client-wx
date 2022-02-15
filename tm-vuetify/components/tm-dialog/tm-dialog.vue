@@ -10,12 +10,12 @@
 		<view @click.stop="" :class="[show ? 'success' : '']">
 			<view :class="[clickOverlay ? 'clickover' : '']">
 				<tm-sheet :black="black_tmeme" :padding="[0, 0]" classname="overflow" :width="600" :round="round" shadow="10">
-					<view class="text-size-g flex-center text-weight-b px-32 py-32 " :class="[black_tmeme ? 'bk' : '', bottomBorder ? 'border-b-1' : '']">
+					<view class="text-size-g flex-center text-weight-b px-32 pt-32 " :class="[black_tmeme ? 'bk' : '', bottomBorder ? 'border-b-1' : '']">
 						<slot name="title">{{ title }}</slot>
 					</view>
-					<view class="px-50 py-n10 pt-32 text-size-n text-align-center" style="max-height:700rpx;overflow-y: auto;">
+					<view class="px-50 py-n12 text-size-n text-align-center" style="max-height:700rpx;overflow-y: auto;">
 						<slot name="default">
-							<view class="py-24">
+							<view >
 								<text :class="[black_tmeme ? 'text-white' : 'text-grey-darken-3']">{{ content }}</text>
 								<view v-if="model == 'confirm'" class="pt-24">
 									<tm-input bg-color="grey-lighten-5" @input="suren" :black="black_tmeme" v-model="inputValSd" :border-bottom="false" :flat="true"></tm-input>
@@ -28,6 +28,7 @@
 						<view v-if="theme == 'merge'" class="py-0 flex-between">
 							<tm-button
 								:fllowTheme="fllowTheme"
+								:height="80"
 								text
 								:black="black_tmeme"
 								@click="concelClick"
@@ -42,6 +43,7 @@
 							</tm-button>
 							<tm-button
 								:fllowTheme="fllowTheme"
+								:height="80"
 								:black="black_tmeme"
 								@click="confirmClick"
 								:theme="color_tmeme"
@@ -59,7 +61,7 @@
 							<tm-button
 								:fllowTheme="fllowTheme"
 								text
-								:height="80"
+								:height="72"
 								:black="black_tmeme"
 								@click="concelClick"
 								v-if="showCancel"
@@ -74,7 +76,7 @@
 							</tm-button>
 							<tm-button
 								:fllowTheme="fllowTheme"
-								:height="80"
+								:height="72"
 								:black="black_tmeme"
 								@click="confirmClick"
 								:theme="color_tmeme"
@@ -136,7 +138,7 @@ export default {
 		},
 		bottomBorder: {
 			type: Boolean,
-			default: true
+			default: false
 		},
 		black: {
 			type: Boolean | String,
@@ -182,7 +184,7 @@ export default {
 		},
 		round: {
 			type: Number | String,
-			default: 3
+			default: 8
 		},
 		inputVal: {
 			type: String,

@@ -2,10 +2,10 @@
 <template>
 	<view class="nobody fulled"
 		:class="[absolute?'fulled':'',fixed?'d-inline-block':'',absolute&&position=='bottom'?'flex-end-center height100':'']">
-		<view
+		<view  
 			:class="[absolute?'fulled':'',absolute?'relative':'',absolute&&position=='top'?'flex-center':'',absolute&&position=='bottom'?'flex-end-center height100':'',fixed?'d-inline-block':'']">
 
-			<view class="flotbtnId" :style="pos" :class="[absolute?'absolute':'',fixed?'fixed':'']">
+			<view  class="flotbtnId" :style="pos" :class="[absolute?'absolute':'',fixed?'fixed':'']">
 
 				<slot name="default">
 					<tm-button
@@ -214,7 +214,11 @@
 		async mounted() {
 			let t = this;
 			this.$nextTick(function(){
-				t.thisPos = t.posfun();
+				
+				t.$Querey('.flotbtnId').then(v=>{
+					t.position_info = v;
+					t.thisPos = t.posfun();
+				})
 			})
 			// #ifdef H5
 			
@@ -222,7 +226,7 @@
 				t.thisPos = t.posfun();
 			})
 			// #endif
-			this.position_info = await this.$Querey('.flotbtnId')
+			
 		},
 		methods: {
 			getsafeJl(){
@@ -276,8 +280,10 @@
 						
 						return `bottom:${ this.offset[1]+safbo}px;left:${this.offset[0]}px;`;
 					} else if (this.position == 'top') {
+						
 						let js = uni.getSystemInfoSync();
 						let left = js.windowWidth;
+						
 						if (this.position_info.length > 0) {
 							let w = this.position_info[0].width;
 							return `transform:translateX(${this.offset[0]}px) translateY(${this.offset[1]}px);top:0;left:${(left-w)/2}px;`;
@@ -286,7 +292,8 @@
 					} else if (this.position == 'bottom') {
 						let safbo = this.getsafeJl()
 						if(!this.safe) safbo=0
-						
+						let js = uni.getSystemInfoSync();
+						let left = js.windowWidth;
 						if (this.position_info.length > 0) {
 							let w = this.position_info[0].width;
 							return `transform:translateX(${this.offset[0]}px) translateY(${this.offset[1]}px);bottom:${safbo}px;left:${(left-w)/2}px`;

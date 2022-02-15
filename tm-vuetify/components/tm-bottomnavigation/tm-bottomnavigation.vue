@@ -56,8 +56,8 @@
 											flexShrink: 0
 										}">
 										<view
-											:class="[item['customColor'] ? item['customColor'] : bgColor, black_tmeme ? 'bk' : '']"
-											style="width: 90upx;height: 90upx;" class="rounded red flex-center">
+											:class="[item['customColor'] ? item['customColor'] : (bgColor||'red'), black_tmeme ? 'bk' : '']"
+											style="width: 90upx;height: 90upx;" class="rounded  flex-center">
 											<tm-icons :black="black_tmeme" :color="item['customFontColor'] || iconColorGrey"
 												:size="data.size" :name="data.icon"></tm-icons>
 										</view>
@@ -424,7 +424,7 @@
 <style>
 	page,
 	body {
-		/* padding-bottom: 167upx; */
+		padding-bottom: 167upx;
 	}
 </style>
 <style lang="scss" scoped>

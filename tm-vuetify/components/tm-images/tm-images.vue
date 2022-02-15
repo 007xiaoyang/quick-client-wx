@@ -3,13 +3,16 @@
 		
 		<view class="fulled fulled-height tm-images-load flex-center">
 			<view class="d-inline-block load">
-				<text v-if="!isLoad" class="iconfont icon-loading text-size-n text-grey"></text>
+				<text v-if="isLoad" class="iconfont icon-loading text-size-n text-grey"></text>
 			</view>
-			
-			<image v-show="isLoad"  @error="error"  :class="[round=='rounded'?'rounded':`round-${round}`]" :style="{
+			<view class="d-inline-block" v-if="isError">
+				<text  class="iconfont icon-exclamationcircle-f text-size-n text-grey"></text>
+			</view>
+			<image v-show="!isLoad"  @error="error"  :class="[round=='rounded'?'rounded':`round-${round}`]" :style="{
 				width:w+'px',
 				height:h+'px'
 			}" @load="loadPic" :src="src_path" :mode="model"></image>
+			
 		</view>
 		
 	</view>
@@ -66,6 +69,7 @@
 				w: 0,
 				h: 0,
 				isLoad:false,
+				isError:false,
 			};
 		},
 		computed:{
@@ -89,17 +93,18 @@
 			}
 		},
 		mounted() {
-			
+			this.isLoad = true;
 		},
 		methods: {
 			error(e) {
+				this.isLoad = false;
+				this.isError = true;
 				this.$emit('error', e);
 			},
 			async loadPic(e) {
 				let wh = e.detail;
-				
-				this.isLoad = true;
-				
+				this.isLoad = false;
+				this.isError = false;
 				
 				this.$nextTick(async function(){
 					let tb = await this.$Querey(".tm-images",this,30).catch(ev => {})

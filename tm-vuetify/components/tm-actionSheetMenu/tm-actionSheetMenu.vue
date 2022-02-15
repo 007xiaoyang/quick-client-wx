@@ -2,11 +2,10 @@
 	<view class="tm-actionSheetMenu">
 		<tm-poup @change="toogle" ref="pop" :black="false" v-model="showpop" height="auto" bg-color="none">
 			<view class="ma-32">
-				<view class=" round-4 overflow ">
+				<view class=" round-8 overflow ">
 					<tm-button
 						:fllowTheme="false"
 						:black="black_tmeme"
-						iteme-class="mb-2"
 						font-size="22"
 						font-color="grey"
 						:theme="black_tmeme ? 'grey-darken-4' : 'white'"
@@ -22,7 +21,7 @@
 							@click="onclick(index, item)"
 						 v-for="(item, index) in actions"
 							:key="index"
-							:iteme-class="'text-' + color_tmeme"
+							:item-class="'text-' + color_tmeme"
 							:theme="black_tmeme ? 'grey-darken-4' : 'white'"
 							block
 							flat
@@ -32,7 +31,7 @@
 					</slot>
 				</view>
 				<view style="height: 96upx " class="pb-24 pt-16">
-					<tm-button :fllowTheme="false" :iteme-class="' text-weight-b'" :black="black_tmeme" @click="close" round="4" :theme="black ? 'grey-darken-4' : 'white'" block>
+					<tm-button :round="8" :fllowTheme="false" :item-class="' text-weight-b'" :black="black_tmeme" @click="close" :theme="black ? 'grey-darken-4' : 'white'" block>
 						取消
 					</tm-button>
 				</view>
@@ -84,7 +83,7 @@ export default {
 		},
 		fontColor: {
 			type: String,
-			default: 'primary'
+			default: 'black'
 		},
 		actions: {
 			type: Array,

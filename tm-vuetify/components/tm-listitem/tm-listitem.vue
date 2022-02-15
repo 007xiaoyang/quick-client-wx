@@ -18,10 +18,10 @@
 				border?'border-a-1':''
 			]"
 		>
-			<view :class="['px-' + pz_themeCus.padding[0], 'py-' + pz_themeCus.padding[1], textOverflow]">
+			<view :class="['px-' + pz_themeCus.padding[0], 'py-' + pz_themeCus.padding[1]]">
 				<view class="flex-between ">
 					<view class="left flex-start ">
-						<view class="left-tm-content mr-16 flex-center" v-if="showLeftIcon">
+						<view class="left-tm-content mr-24 flex-center" v-if="showLeftIcon">
 							<slot name="left" :icon="{ icon: leftIcon, color: color_tmeme, fontsize: leftIconSize }">
 								<tm-icons v-if="!group" :color="color_tmeme" :name="leftIcon" :size="leftIconSize"></tm-icons>
 								<tm-icons v-if="group" :color="color_tmeme" :name="!showContent ? 'icon-caret-right' : 'icon-sort-down'" :size="24"></tm-icons>
@@ -248,10 +248,6 @@ export default {
 		fllowTheme:{
 			type:Boolean|String,
 			default:true
-		},
-		textOverflow: {
-			type: String,
-			default: ''
 		}
 	},
 	computed: {

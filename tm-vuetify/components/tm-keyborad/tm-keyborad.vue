@@ -14,45 +14,45 @@
 						</view>
 						<tm-row custom-class="px-5">
 							<tm-col  grid="3" padding="5" color="none">
-								<tm-button :fllowTheme="false" item-class="text-weight-b"  @click="clickNumo(1,'num')" :black="black_tmeme" :round="round"  block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color"  height="100">1</tm-button>
+								<tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b"  @click="clickNumo(1,'num')" :black="black_tmeme" :round="round"  block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color"  height="100">1</tm-button>
 							</tm-col>
 						
 							<tm-col grid="3" padding="5" color="none">
-								<tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(2,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">2</tm-button>
+								<tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(2,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">2</tm-button>
 							</tm-col>
 							<tm-col grid="3" padding="5" color="none">
-								<tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(3,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">3</tm-button>
+								<tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(3,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">3</tm-button>
 							</tm-col>
 							<tm-col grid="3" padding="5" color="none">
-								<tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(null,'del')" icon="icon-caret-left" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" :font-color="black?'grey':'black'" height="100">删除</tm-button>
+								<tm-button :fontSize="42" :iconSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(null,'del')" icon="icon-caret-left" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" :font-color="black?'grey':'black'" height="100"></tm-button>
 							</tm-col>
 						</tm-row>
 						<tm-row align="flex-start">
 							<tm-col grid="9"  color="none" custom-class="px-5">
 								<tm-row>
-									<tm-col grid="4" padding="5" color="none"><tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(4,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">4</tm-button></tm-col>
-									<tm-col grid="4" padding="5" color="none"><tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(5,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">5</tm-button></tm-col>
-									<tm-col grid="4" padding="5" color="none"><tm-button  :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(6,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">6</tm-button></tm-col>
+									<tm-col grid="4" padding="5" color="none"><tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(4,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">4</tm-button></tm-col>
+									<tm-col grid="4" padding="5" color="none"><tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(5,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">5</tm-button></tm-col>
+									<tm-col grid="4" padding="5" color="none"><tm-button :fontSize="42"  :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(6,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">6</tm-button></tm-col>
 								</tm-row>
 								<tm-row>
-									<tm-col grid="4" padding="5" color="none"><tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(7,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">7</tm-button></tm-col>
-									<tm-col grid="4" padding="5" color="none"><tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(8,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">8</tm-button></tm-col>
-									<tm-col grid="4" padding="5" color="none"><tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(9,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">9</tm-button></tm-col>
+									<tm-col grid="4" padding="5" color="none"><tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(7,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">7</tm-button></tm-col>
+									<tm-col grid="4" padding="5" color="none"><tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(8,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">8</tm-button></tm-col>
+									<tm-col grid="4" padding="5" color="none"><tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(9,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">9</tm-button></tm-col>
 								</tm-row>
 								<tm-row v-if="model_code=='number'">
-									<tm-col :grid="decimal?4:8" padding="5" color="none"><tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(0,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">0</tm-button></tm-col>
-									<tm-col v-if="decimal" grid="4" padding="5" color="none"><tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo('.','dian')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">.</tm-button></tm-col>
-									<tm-col  grid="4" padding="5" color="none"><tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(null,'cancel')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">关闭</tm-button></tm-col>
+									<tm-col :grid="decimal?4:8" padding="5" color="none"><tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(0,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">0</tm-button></tm-col>
+									<tm-col v-if="decimal" grid="4" padding="5" color="none"><tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo('.','dian')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">.</tm-button></tm-col>
+									<tm-col  grid="4" padding="5" color="none"><tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(null,'cancel')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">关闭</tm-button></tm-col>
 								</tm-row>
 								<tm-row v-if="model_code=='code'">
-									<tm-col grid="4" padding="5" color="none"><tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(0,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">0</tm-button></tm-col>
-									<tm-col grid="4" padding="5" color="none"><tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo('x','code-x')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">X</tm-button></tm-col>
-									<tm-col grid="4" padding="5" color="none"><tm-button :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(null,'cancel')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">关闭</tm-button></tm-col>
+									<tm-col grid="4" padding="5" color="none"><tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(0,'num')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">0</tm-button></tm-col>
+									<tm-col grid="4" padding="5" color="none"><tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo('x','code-x')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">X</tm-button></tm-col>
+									<tm-col grid="4" padding="5" color="none"><tm-button :fontSize="42" :fllowTheme="false" item-class="text-weight-b" @click="clickNumo(null,'cancel')" :black="black_tmeme" :round="round" block :shadow="shadown" :theme="black_tmeme?'grey-darken-4':color" height="100">关闭</tm-button></tm-col>
 									
 								</tm-row>
 							</tm-col>
 							<tm-col grid="3"  color="none" custom-class="mt-5 mr-5">
-								<tm-button  item-class="text-weight-b" :round="round"  label="确认" :theme="okColor" @click.stop="clickNumo(null,'confirm')" block :shadow="shadown"  height="312"></tm-button>
+								<tm-button :fontSize="42"  item-class="text-weight-b" :round="round"  label="确认" :theme="okColor" @click.stop="clickNumo(null,'confirm')" block :shadow="shadown"  height="312"></tm-button>
 							</tm-col>
 						</tm-row>
 					</view>
@@ -72,7 +72,7 @@
 									<block v-for="(item,index) in chepai[enIndex]" :key="index">
 										
 										<tm-col width="12.5%" padding="5" color="none">
-											<tm-button :fllowTheme="false" item-class="text-weight-b"  
+											<tm-button :fontSize="32" :iconSize="32" :fllowTheme="false" item-class="text-weight-b"  
 											@click="clickNumo(item,'car')" 
 											:black="black_tmeme" :round="round"  
 											block :shadow="shadown" 
@@ -88,7 +88,7 @@
 							<tm-col grid="2" color="none">
 								<tm-row>
 									<tm-col grid="12" padding="5" color="none">
-										<tm-button :fllowTheme="false" item-class="text-weight-b"  
+										<tm-button :fontSize="32" :iconSize="32" :fllowTheme="false" item-class="text-weight-b"  
 										@click="clickNumo(null,'del')" icon="icon-caret-left"
 										:black="black_tmeme" :round="round"  
 										block shadow="0" 
@@ -96,7 +96,6 @@
 										font-color="red"
 										text
 										height="80">
-											删
 										</tm-button>
 									</tm-col>
 									<tm-col grid="12" padding="5" color="none">
@@ -105,7 +104,7 @@
 										:black="black_tmeme" :round="round"  
 										block shadow="0" 
 										:theme="okColor"
-										
+										:fontSize="32" :iconSize="32"
 										text
 										height="80">
 											关闭
@@ -118,6 +117,7 @@
 										block :shadow="0" 
 										:theme="okColor" 
 										text
+										:fontSize="32" :iconSize="32"
 										height="80">
 											中/英
 										</tm-button>
@@ -128,6 +128,7 @@
 										:round="round"  
 										block :shadow="shadown" 
 										:theme="okColor" 
+										:fontSize="32" :iconSize="32"
 										height="133">
 											确认
 										</tm-button>
@@ -154,6 +155,7 @@
 											@click="clickNumo(item,'password')" 
 											:black="black_tmeme" :round="round"  
 											block :shadow="shadown" 
+											:fontSize="32" :iconSize="32"
 											:theme="black_tmeme?'grey-darken-4':color"
 											height="80">
 												{{item}}
@@ -173,8 +175,8 @@
 										theme="red" 
 										font-color="red"
 										text
+										:fontSize="32" :iconSize="32"
 										height="80">
-											删
 										</tm-button>
 									</tm-col>
 									<tm-col grid="12" padding="5" color="none">
@@ -183,7 +185,7 @@
 										:black="black_tmeme" :round="round"  
 										block shadow="0" 
 										:theme="okColor"
-									
+										:fontSize="32" :iconSize="32"
 										text
 										height="80">
 											关闭
@@ -196,6 +198,7 @@
 										block :shadow="0" 
 										:theme="okColor" 
 										text
+										:fontSize="32" :iconSize="32"
 										height="80">
 											英/符
 										</tm-button>
@@ -206,6 +209,7 @@
 										:round="round"  
 										block :shadow="shadown" 
 										:theme="okColor" 
+										:fontSize="32" :iconSize="32"
 										height="133">
 											确认
 										</tm-button>

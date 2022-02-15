@@ -14,7 +14,6 @@
 			:fontSize="fontSize"
 			:class-style="activeIndex==index?`border-${color_tmeme}-l-2`:`border-${bgColor}-l-2`"
 			round="0" shadow="0"
-			:text-overflow="textOverflow"
 			>
 			<tm-badges color='red' :fllowTheme="false" :offset="[12,-10]" v-if="item.dot>0&&dot" :dot="false" :label="item.dot"></tm-badges>
 			<view class="" >
@@ -116,10 +115,6 @@
 			fllowTheme:{
 				type:Boolean|String,
 				default:true
-			},
-			textOverflow: {
-				type: String,
-				default: ''
 			}
 		},
 		watch:{

@@ -5,8 +5,11 @@
 				<tm-sheet margin="0" round="0" :padding="[0 , 0]" color="grey-lighten-3" shadow="0">
 					<tm-sheet v-for="(item,index) in cartbar" :key="index" color="" padding="0">
 						<tm-cartCellListFood border="" :mdata="item" :cart-num.sync="item.buy">
-							<template>
-								<tm-checkbox border-color="pink" color="bg-gradient-pink-accent" v-model="item.checkbox" model="round" round="rounded"></tm-checkbox>
+							<template v-slot:first>
+								<tm-checkbox dense border-color="pink" color="bg-gradient-pink-accent" v-model="item.checkbox" model="round" round="rounded"></tm-checkbox>
+							</template>
+							<template v-slot:stepper>
+								<tm-stepper v-model="item.buy" :step="1" color="bg-gradient-pink-accent" min="1" :round="25" circular></tm-stepper>
 							</template>
 						</tm-cartCellListFood>
 					</tm-sheet>
@@ -52,7 +55,7 @@
 				saleLabel: ['7折优惠', '首单减3元'],
 				unit: '/斤',
 				id: 3,
-				buy: 0,
+				buy: 2,
 				itemId: 0,
 				checkbox: true
 			}]

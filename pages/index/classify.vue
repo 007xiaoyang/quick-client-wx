@@ -10,8 +10,8 @@
 		
 		<view class="center-warp">
 			<!-- 左边 -->
-			<scroll-view class="left-warp grey-lighten-4" :scroll-y="true">
-				<tm-sliderNav :round="0" color="pink" textOverflow="text-overflow" :width="180" @change="change" rang-key="text" :list="tabs" text bg-color="grey-lighten-4"></tm-sliderNav>
+			<scroll-view class="left-warp grey-lighten-3" :scroll-y="true">
+				<tm-sliderNav :round="0" color="pink" textOverflow="text-overflow" :width="180" @change="change" rang-key="text" :list="tabs" text bg-color="grey-lighten-3"></tm-sliderNav>
 			</scroll-view>
 			
 			<view class="right-warp">

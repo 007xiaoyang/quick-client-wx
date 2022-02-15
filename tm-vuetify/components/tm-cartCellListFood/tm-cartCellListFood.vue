@@ -7,7 +7,10 @@
 		border === 'bottom' ? 'border-b-1' : '',
 		round
 	]">
-		<slot></slot>
+		
+		<view class="flex-center" :style="{ height: imgWidth + 'rpx'}">
+			<slot name="first"></slot>
+		</view>
 		<view v-if="mdata[keyMap['img']]" class="tm-cartCellListFood-img" :style="{
 			width:imgWidth+'rpx',
 			height:imgWidth+'rpx'
@@ -35,23 +38,25 @@
 						<text v-if="mdata[keyMap['salePrice']]" class="text-delete text-size-xxs text-grey">￥{{mdata[keyMap['salePrice']]}}</text>
 						
 					</view>
-					<view class="flex">
-						<block v-if="cNum>0">
+					<slot name="stepper">
+						<view class="flex">
+							<block v-if="cNum>0">
+								<view :style="{
+								width:`${actionSize}rpx`,
+								height:`${actionSize}rpx`,
+							}" :class="[color,black_tmeme ? 'bk' : '',]" @click="jian" class="tm-cartCellListFood-actions rounded  flex-center outlined">
+									<text  class="iconfont icon-minus text-size-xxs"></text>
+								</view>
+								<view class="px-12 text-size-n " :class="[black_tmeme ? 'bk' : '',]">{{cNum}}</view>
+							</block>
 							<view :style="{
-							width:`${actionSize}rpx`,
-							height:`${actionSize}rpx`,
-						}" :class="[color,black_tmeme ? 'bk' : '',]" @click="jian" class="tm-cartCellListFood-actions rounded  flex-center outlined">
-								<text  class="iconfont icon-minus text-size-xxs"></text>
+								width:`${actionSize}rpx`,
+								height:`${actionSize}rpx`,
+							}" :class="[color,`border-${color}-a-1`,black_tmeme ? 'bk' : '',]" @click="jia" class="tm-cartCellListFood-actions rounded  flex-center ">
+								<text class="iconfont icon-plus text-size-xs"></text>
 							</view>
-							<view class="px-12 text-size-n " :class="[black_tmeme ? 'bk' : '',]">{{cNum}}</view>
-						</block>
-						<view :style="{
-							width:`${actionSize}rpx`,
-							height:`${actionSize}rpx`,
-						}" :class="[color,`border-${color}-a-1`,black_tmeme ? 'bk' : '',]" @click="jia" class="tm-cartCellListFood-actions rounded  flex-center ">
-							<text class="iconfont icon-plus text-size-xs"></text>
 						</view>
-					</view>
+					</slot>
 				</view>
 			</view>
 		</view>

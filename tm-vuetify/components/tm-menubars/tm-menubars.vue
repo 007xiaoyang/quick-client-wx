@@ -10,7 +10,7 @@
 			]">
 			<view :style="{ height: tabHeight }"></view>
 			<view class="body_wk flex-between">
-				<view class="left flex-start" v-if="leftNode">
+				<view class="left flex-start">
 					<block v-if="showback">
 						<view v-if="pageUrl && isHome == false" class="home-btn mr-20 text flex-center flex-shrink"
 							:class="[color_tmeme,black_tmeme ? 'outlined bk' : '']">
@@ -25,7 +25,7 @@
 
 					<slot name="left" :data="{ style: widths, isTransparent: isTransparent, title: title }"></slot>
 				</view>
-				<view class="center flex-center text-size-g " :class="[`text-${fontColorTheme}`]">
+				<view class="center flex-center text-size-g text-overflow text-align-center" :class="[`text-${fontColorTheme}`]">
 					<slot name="default" :data="{ style: widths, isTransparent: isTransparent, title: title }">
 						{{ title }}
 					</slot>
@@ -119,10 +119,6 @@
 			},
 			// 跟随主题色的改变而改变。
 			fllowTheme: {
-				type: Boolean | String,
-				default: true
-			},
-			leftNode: {
 				type: Boolean | String,
 				default: true
 			}
