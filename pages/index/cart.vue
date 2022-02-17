@@ -2,8 +2,8 @@
 	<view class="fulled-height cart-hieght hidden grey-lighten-3">
 		<view class="scroll">
 			<mescroll-uni :fixed="false" ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
-				<tm-sheet margin="0" round="0" :padding="[0 , 0]" color="grey-lighten-3" shadow="0">
-					<tm-sheet v-for="(item,index) in cartbar" :key="index" color="" padding="0">
+				<tm-sheet margin="0" round="0" :padding="[0, 32, 0, 0]" color="grey-lighten-3" shadow="0">
+					<tm-sheet v-for="(item,index) in cartbar" :key="index" :margin="[32, 0, 32, 32]" color="" padding="0" class="mb-20">
 						<tm-cartCellListFood border="" :mdata="item" :cart-num.sync="item.buy">
 							<template v-slot:first>
 								<tm-checkbox dense border-color="pink" color="bg-gradient-pink-accent" v-model="item.checkbox" model="round" round="rounded"></tm-checkbox>

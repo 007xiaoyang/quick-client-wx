@@ -14,8 +14,8 @@
 			black_tmeme ? 'bk' : '',
 			black_tmeme == 'true' || black_tmeme === true ? 'grey-darken-5' : color,
 			dense === true || dense == 'true' ? 'nom' : '',
-			'mx-'+margin[0],'my-'+margin[1],
-			'px-'+padding[0],'py-'+padding[1],
+			marginClass,
+			paddingClass,
 			classs,
 			border ? 'border-a-1' : '',
 			outlined ? 'outlined' : ''
@@ -146,6 +146,20 @@ export default {
 		black_tmeme:function(){
 			if(this.black!==null) return this.black;
 			return this.$tm.vx.state().tmVuetify.black;
+		},
+		marginClass: function() {
+			if (Array.isArray(this.margin) && this.margin.length == 4) {
+				return ' ml-' + this.margin[0] + ' mt-' + this.margin[1] + ' mr-' + this.margin[2] + ' mb-' + this.margin[3];
+			} else {
+				return ' mx-'+ this.margin[0] + ' my-'+ this.margin[1];
+			}
+		},
+		paddingClass: function() {
+			if (Array.isArray(this.padding) && this.padding.length == 4) {
+				return ' pl-' + this.padding[0] + ' pt-' + this.padding[1] + ' pr-' + this.padding[2] + ' pb-' + this.padding[3];
+			} else {
+				return ' px-'+ this.padding[0] + ' py-'+ this.padding[1];
+			}
 		}
 	},
 	data() {

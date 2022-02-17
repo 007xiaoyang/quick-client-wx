@@ -1,18 +1,18 @@
 <template>
-	<view class="warps" :class="[$tm.vx.state().tmVuetify.black ? 'black' : 'grey-lighten-4']">
+	<view class="hidden fixed fulled" :class="[$tm.vx.state().tmVuetify.black ? 'black' : 'grey-lighten-4']">
 		<tm-menubars :title="menuTitle" color="pink" :showback="false" :flat="true">
 			<template v-slot:left>
 				<view class="pl-10 text-size-g py-1">诚信商城</view>
 			</template>
 		</tm-menubars>
 		
-		<view class="center_warp" :style="{height: bodyHeight + 'px'}">
+		<scroll-view class="center_warp" scroll-y :style="{height: bodyHeight + 'px'}">
 			<home v-if="tabIndex == 0" class="fulled-height"></home>
 			<classify v-else-if="tabIndex == 1" class="fulled-height"></classify>
 			<news v-else-if="tabIndex == 2" class="fulled-height"></news>
 			<cart v-else-if="tabIndex == 3" class="fulled-height" :bottom="cardBar"></cart>
 			<my v-else-if="tabIndex == 4" class="fulled-height"></my>
-		</view>
+		</scroll-view>
 
 		<tm-bottomnavigation class="tabbar" icon-color="pink" icon-color-grey="grey-lighten-1" :list="tabbar" 
 			@change="tabBarChange"></tm-bottomnavigation>
@@ -32,7 +32,7 @@
 				bodyHeight: '100%',
 				cardBar: 0,
 				menuTitle: '首页',
-				tabIndex: 1,
+				tabIndex: 2,
 				tabbar: [{
 						icon: 'icon-position-fill',
 						value: '首页',
@@ -86,12 +86,4 @@
 <style>
 </style>
 <style lang="scss" scoped>
-	.warps {
-		height: 100%;
-		overflow: hidden;
-		
-		.center_warp  {
-			overflow: auto;
-		}
-	}
 </style>

@@ -1,8 +1,8 @@
 <template>
 	<view>
-		<view v-if="show_dev" @click.stop.prevent="maskClick" :class="[mask?'mask':'']"
+		<view v-if="show_dev" @click.stop.prevent="maskClick" :class="[mask? showBody?'mask':'shallow-mask':'']"
 			class="tm-message fixed t-0 l-0 fulled fulled-height flex-center">
-			<view :class="[black_dev?'black bk':'',clickOverlay?'clickOverlay':'']" class="tm-message-body  round-6 pa-24 flex-center shadow-24 ">
+			<view v-if="showBody" :class="[black_dev?'black bk':'',clickOverlay?'clickOverlay':'']" class="tm-message-body  round-6 pa-24 flex-center shadow-24 ">
 				<view class=" flex-center flex-col">
 					<view :class="[
 						model,
@@ -116,6 +116,7 @@
 				mask: false,
 				black_dev: false,
 				clickOverlay:false,
+				showBody: true
 			};
 		},
 		destroyed(){
@@ -137,8 +138,13 @@
 					icon: '',
 					mask: false,
 					wait: 2000,
-					black: this.black_tmeme
+					black: this.black_tmeme,
+					showBody: true
 				};
+				console.log({
+					...def,
+					...arguments[0]
+				})
 				let arg = arguments[0] ? {
 					...def,
 					...arguments[0]
@@ -149,13 +155,15 @@
 					icon,
 					mask,
 					wait,
-					black
+					black,
+					showBody
 				} = arg;
 				this.label_dev = label;
 				this.model = model;
 				this.icon_dev = icon;
 				this.black_dev = black;
 				this.mask = mask;
+				this.showBody = showBody
 				clearTimeout(this.timeId);
 				if (this.model == 'load') {
 					this.show_dev = true;
@@ -186,7 +194,7 @@
 
 <style lang="scss" scoped>
 	.tm-message {
-		z-index: 601;
+		z-index: 9999;
 		pointer-events: none;
 		background-color: transparent;
 
@@ -195,7 +203,12 @@
 			background-color: rgba(0, 0, 0, 0.3);
 			pointer-events: auto;
 		}
-
+		&.shallow-mask {
+			backdrop-filter: blur(3px);
+			background-color: rgba(0, 0, 0, 0.3);
+			pointer-events: auto;
+			opacity: 0.4;
+		}
 		.tm-message-body {
 			min-width: 110rpx;
 			min-height: 120rpx;
