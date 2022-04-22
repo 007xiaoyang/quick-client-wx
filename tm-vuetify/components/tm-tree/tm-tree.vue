@@ -13,7 +13,7 @@
 								:size="32"></tm-icons>
 						</view>
 						<text :class="[`text-${item.checked ? color_tmeme : black_tmeme ? 'grey' : 'black'}`]"
-							class="text-size-n">{{ item.title }}</text>
+							class="text-size-n">{{ item["title"]||item["text"] }}</text>
 					</view>
 				</view>
 				<view v-if="item.isDir" class="">
@@ -21,7 +21,7 @@
 						<view class="flex-start">
 							<tm-icons :fllowTheme="fllowTheme" :color="color_tmeme"
 								:name="item.openDir ? dirIconList[1] : dirIconList[0]" :size="32"></tm-icons>
-							<view v-if="!read" @click.stop="changeCheckboxGroupItem(item)" class="px-12">
+							<view v-if="!read && mode=='multi'" @click.stop="changeCheckboxGroupItem(item)" class="px-12">
 								<tm-checkbox :icon="item['dirType']==3?'icon-minus':'icon-check'"
 									:fllowTheme="fllowTheme" :color="color_tmeme" :disabled="item['disabled']" dense
 									v-model="item.checked"></tm-checkbox>
@@ -29,15 +29,15 @@
 							<text
 								:class="[`text-${item.checked ? color_tmeme : black_tmeme ? 'grey' : 'black'}`, black_tmeme ? 'bk' : '']"
 								class="text-size-n">
-								{{ item.title }}{{ item.openDir }}
+								{{ item["title"]||item["text"] }}
 							</text>
 						</view>
 					</view>
 					<view v-if="item.openDir && item['children'].length > 0" class="ml-24 flex-shrink border-l-1 "
 						:class="[black_tmeme ? 'bk' : '']" style="border-left-style: dotted;">
-						<tm-tree :read="read" :fllowTheme="fllowTheme" :color="color_tmeme"
+						<tm-tree :mode="mode" :read="read" :fllowTheme="fllowTheme" :color="color_tmeme"
 							:dirOpenIcon="dirIconList[1]" :dirCloseIcon="dirIconList[0]" @changePrarent="changePrarent"
-							:list="item['children']" :prarent="item"></tm-tree>
+							:list="item['children']" :prarent="item" @praentclear="preantchangClearChecked"></tm-tree>
 					</view>
 				</view>
 			</view>
@@ -53,6 +53,7 @@
 	 * @property {String} dirCloseIcon = [] 默认 'icon-caret-right'，关闭后的图标
 	 * @property {String} dirOpenIcon = [] 默认 'icon-sort-down'，打开后的图标
 	 * @property {String} color = [] 默认 'primary'，主题色
+	 * @property {String} mode = [multi|radio] 默认 'multi'，多选或单选模式。
 	 * @property {Boolean|String} read = [] 默认 false，是否只读，作为目录展示
 	 */
 	import tmCheckbox from '@/tm-vuetify/components/tm-checkbox/tm-checkbox.vue';
@@ -108,6 +109,10 @@
 			read: {
 				type: Boolean | String,
 				default: false
+			},
+			mode:{
+				type:String,
+				default:'multi' //radio 单选  multi多选
 			}
 		},
 		watch: {
@@ -168,16 +173,23 @@
 				if (item['disabled'] === true || this.prarent?.disabled === true) return;
 				this.$nextTick(function() {
 					this.list_c = this.setChildListData(this.list_c, item, 'checked', item.checked);
+					if(this.mode=="radio"){
+						this.clearChecked()
+						item.checked = true;
+						this.$emit('praentclear',item);
+						
+						if(!this.prarent){
+							this.preantchangClearChecked(item)
+						}
+						return;
+					}
 					this.$nextTick(function() {
 						if (this.prarent) {
-
 							//递归修改父节点。
 							let p = {
 								...this.prarent
 							};
 							p.children = [...this.list_c];
-
-
 							let prenatKeyArray = this.getChildrenKeyToArray(p, 'checked');
 							let isAllChecked = true; //是否全部选中。
 							let isAllChecked_min = true; //是否半选中。
@@ -217,6 +229,9 @@
 							// p.checked = isAllChecked;
 
 							this.$emit('changePrarent', p);
+							
+						}else{
+							
 						}
 					});
 				});
@@ -231,6 +246,7 @@
 					if (this.prarent) {
 						if (item['disabled'] === true) return;
 						if (this.prarent['disabled'] === true) return;
+						
 						// 再反递归，修改它的上一级，一直类推到第一级。
 						let p = {
 							...this.prarent
@@ -262,14 +278,38 @@
 						p['checked'] = isAllChecked;
 
 						this.$emit('changePrarent', p);
+						
 					} else {
 						// 第一级。
 						let rulst = this.getCheckedArray();
 						this.$emit('change', rulst);
+						
 					}
 				});
 			},
-
+			//收到子节点请求清空所有选择，并设置某个属性
+			preantchangClearChecked(item){
+				
+				if(!this.prarent){
+					
+					this.clearChecked();
+					if(item){
+						let t = this
+						if(typeof item == 'object' && !Array.isArray(item)){
+							setTimeout(function(){
+								t.setDefaultSelectedKey([item.id])
+							},150)
+						}else if(typeof item == 'object' && Array.isArray(item)){
+							setTimeout(function(){
+								t.setDefaultSelectedKey([...item])
+							},150)
+						}
+					}
+				}else{
+					
+					this.$emit('praentclear',item);
+				}
+			},
 			//设置某一个key的属性。
 			/**
 			 * @param {Object} list 目标数组
@@ -384,9 +424,6 @@
 
 			//取得子集下所有相同属性的集合。根据指定key的变量条件取得。
 			getChildrenKeyToArrayByvalue(item, quereyKey, key, value) {
-				
-				
-
 				function ch(objAr) {
 					let p = [];
 					if (typeof objAr == 'object' && Array.isArray(objAr)&& objAr.length>0) {
@@ -465,6 +502,13 @@
 						children['openDir'] = dirType;
 						this.setDirListData(children, 'openDir', dirType);
 					}
+				}
+			},
+			//打开所有折叠.
+			__openAll(){
+				// this.setDirListData(this.list_c, 'openDir', true);
+				for(let i=0;i<this.list_c.length;i++){
+					this.__openDir(this.list_c[i].id,true)
 				}
 			},
 			//获取当前列表数据。子级不能调用。

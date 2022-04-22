@@ -11,8 +11,10 @@
 				round==='rounded'?'rounded':'round-'+round]"
 				>
 					<view :class="[changValue?'ani_toMaxToMin_on':'']" class="absolute flex-center" style="width: 100%;height: 100%;">
-						<tm-icons v-show="model === 'normal'" :size="sizes.gou" :color="disabled?'grey':'white'"  :name="changValue?icon:' '"></tm-icons>
-						<view v-show="model === 'round'&&changValue" class=" rounded d-inline-block" :class="{white:!disabled,grey:disabled}" :style="{width: sizes.yuan,height: sizes.yuan}"></view>
+						<tm-icons dense v-show="model === 'normal'" :size="sizes.gou" :color="disabled?'opacity-5 white':'white'"  :name="changValue?icon:' '"></tm-icons>
+						<view v-show="model === 'round'&&changValue" class=" rounded d-inline-block" 
+						:class="[disabled?'opacity-5 white':'white']" 
+						:style="{width: sizes.yuan,height: sizes.yuan}"></view>
 					</view>
 				</view>
 			</slot>

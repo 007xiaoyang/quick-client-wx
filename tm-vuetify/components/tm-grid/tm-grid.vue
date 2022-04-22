@@ -3,7 +3,7 @@
 		<tm-row :custom-class="border ? '  border-grey-lighten-4-a-1 round-5 overflow ' +(black_tmeme?' bk ':'') : ''">
 			<tm-col
 				:maxCol="maxGrid"
-				:custom-class="(border ? ((index+1 < list.length - grid + 1&&list.length>grid) ? ' border-grey-lighten-4-b-1 ' : '') + ((index + 1) % grid ? 'border-grey-lighten-4-r-1 ' : ' ') : '') + (black_tmeme?' bk ':'')"
+				:custom-class="(border ? ((index+1)<=(colNum-1)*grid?'border-grey-lighten-4-b-1 ':'') + ((index + 1) % grid ? 'border-grey-lighten-4-r-1 ' : ' ') : '') + (black_tmeme?' bk ':'')"
 				 v-for="(item, index) in listData" :key="index" :grid="col" justify="center"
 				align="middle"
 				:color="bgColor"
@@ -132,6 +132,14 @@
 			listData: function() {
 				let gs = this.grid - Math.floor(this.list.length / this.grid);
 				return this.list;
+			},
+			gridNum:function(){
+				return this.grid;
+			},
+			colNum:function(){
+				let ts = parseInt(this.listData.length/this.grid);
+				ts = this.listData.length/this.grid>ts?ts+1:ts;
+				return ts;
 			},
 			height_s:function(){
 				return uni.upx2px(this.height)||70

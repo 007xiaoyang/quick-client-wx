@@ -22,7 +22,8 @@ try {
 
 } catch (e) {
 	//TODO handle the exception
-	console.warn('tmui提醒：用户未使用vuex')
+	// console.warn('tmui提醒：用户未使用vuex')
+	console.error('如果未使用vuex，不用理会，如果使用了vuex报错请检错误信息：',e);
 }
 let pdefault_cookies_color = uni.getStorageSync('setTmVuetifyColor')
 let pdefault_cookies_black = uni.getStorageSync('setTmVuetifyBlack')

@@ -1,7 +1,7 @@
 <template>
 	<view class="tm-empty flex-center flex-col my-32">
 
-		<view class="">
+		<view class="py-32">
 			<tm-icons @click="$emit('click')" :color="color" :name="icon?icon:listIcon[model].name" :size="size"></tm-icons>
 		</view>
 		<view class="text-size-n" :class="[

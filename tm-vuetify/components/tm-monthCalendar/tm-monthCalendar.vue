@@ -145,7 +145,8 @@
 
 
 		defaultValue: function(val) {
-			let d = new Date().getFullYear() + '/' + (new Date().getMonth() + 1);
+			let d = new Date().toLocaleDateString();
+			
 			if (this.defaultValue) {
 				d = this.defaultValue.replace(/-/g,'/');
 			}
@@ -166,7 +167,7 @@
 		};
 	},
 	mounted() {
-		let d = new Date().getFullYear() + '/' + (new Date().getMonth() + 1);
+		let d = new Date().toLocaleDateString();
 		if (this.defaultValue) {
 			d = this.defaultValue.replace(/-/g,'/');
 			this.dataValue = this.defaultValue;
@@ -175,10 +176,7 @@
 		this.cal = new Date(d);
 		this.titleVale = this.cal.getFullYear() + '年';
 		this.getData();
-
 		this.showpop = this.value;
-		
-		
 	},
 	methods: {
 		// 取当前年份的月数据。

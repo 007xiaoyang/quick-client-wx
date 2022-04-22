@@ -10,8 +10,9 @@
 				disabled?'grey-lighten-2 border-grey-lighten-1-a-1':'',
 				round==='rounded'?'rounded':'round-'+round]">
 					<view :class="[changValue?'ani_toMaxToMin_on':'']" class="absolute flex-center" style="width: 100%;height: 100%;">
-						<tm-icons v-show="model === 'normal'" :color="disabled?'grey':'white'" :size="sizes.gou" :name="changValue?icon:' '"></tm-icons>
-						<view v-show="model === 'round'&&changValue" class=" rounded d-inline-block" :class="{white:!disabled,grey:disabled}"
+						<tm-icons dense v-show="model === 'normal'" :color="disabled?'opacity-5 white':'white'" :size="sizes.gou" :name="changValue?icon:' '"></tm-icons>
+						<view v-show="model === 'round'&&changValue" class=" rounded d-inline-block" 
+							:class="[disabled?'opacity-5 white':'white']" 
 							:style="{width: sizes.yuan,height: sizes.yuan}"></view>
 					</view>
 				</view>

@@ -56,6 +56,7 @@
 	 * @property {Number} value = [0] 赋值，如果需要同步使用value.sync推荐使用v-model绑定。
 	 * @property {Boolean} vertical = [true|false] 默认：false,是否启用竖向模式。
 	 * @property {Number} height = [200] 默认：200,竖向模式时才有作用。
+	 * @property {Number} width = [] 默认：0,横向时起作用，如果为0自动获取外层宽度。
 	 * @property {Boolean} show-left = [true|false] 默认：false,显示左边数据。
 	 * @property {Boolean} show-right = [true|false] 默认：false,显示右边数据。
 	 * @property {Number} max = [] 默认：100,显示的最大刻度。
@@ -91,6 +92,10 @@
 			height: {
 				type: Number,
 				default: 200
+			},
+			width: {
+				type: Number,
+				default: 0
 			},
 			showLeft: Boolean, //显示左边
 			showRight: Boolean, //显示右边
@@ -231,7 +236,6 @@
 		async mounted() {
 			this.$nextTick(async function() {
 				await this.getwidth();
-				
 				if (Math.abs(this.value) >= Math.abs(this.max)) {
 					this.isError = true;
 					return;
@@ -302,22 +306,20 @@
 				
 			},
 			async getwidth() {
+				let res = await this.$Querey('.tm-slider-id', this).catch(e=>{});
+				res[0].width = res[0].width||uni.upx2px(this.width);
+				res[0].height = res[0].height||uni.upx2px(this.height);
 				if (this.showLeft === false && this.showRight === false) {
-					
-					
-					let res = await this.$Querey('.tm-slider-id', this).catch(e=>{});
-					
 					this.sliderWidth = this.vertical ? res[0].height : res[0].width;
 					return;
 				}
 				if (this.showLeft !== false && this.showRight !== false) {
-					let res = await this.$Querey('.tm-slider-id', this);
+					
 					this.sliderWidth = (this.vertical ? res[0].height : res[0].width) - uni.upx2px(this.vertical ? 50 :
 						100) * 2;
 					return;
 				}
 				if (this.showLeft === true || this.showRight === true) {
-					let res = await this.$Querey('.tm-slider-id', this);
 					this.sliderWidth = (this.vertical ? res[0].height : res[0].width) - uni.upx2px(this.vertical ? 50 :
 						100);
 				}

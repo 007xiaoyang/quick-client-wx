@@ -9,6 +9,7 @@
 
 				<slot name="default">
 					<tm-button
+					v-if="isRender"
 					@contact="$emit('contact', $event)"
 					@error="$emit('error', $event)"
 					@getphonenumber="$emit('getphonenumber', $event)"
@@ -20,8 +21,8 @@
 					:open-type="openType"
 					@click="click"
 					 :showValue="showText" vertical :label="label" :fontSize="fontSize"
-						 :iconSize="iconSize" :theme="color_tmeme" :font-color="fontColor"  :bgcolor="bgcolor"
-						:size="size" :width="width" :icon="icon" fab>
+						 :iconSize="iconSize" :theme="color_tmeme" round="rouned" :font-color="fontColor"  :bgcolor="bgcolor"
+						:size="size" :width="width" :height="width" :icon="icon" fab>
 					</tm-button>
 				</slot>
 				<view  v-if="(show || showActions)&&actions.length>0" class="menulistAction" :class="[actionsPos]">
@@ -99,7 +100,11 @@
 			},
 			width: {
 				type: String | Number,
-				default: NaN
+				default: 100
+			},
+			height: {
+				type: String | Number,
+				default: 100
 			},
 			// 是否显示询问文字
 			showText: {
@@ -208,27 +213,31 @@
 			return {
 				position_info: [],
 				show: false,
+				isRender:false,
 				thisPos:''
 			};
 		},
+		
 		async mounted() {
-			let t = this;
-			this.$nextTick(function(){
-				
-				t.$Querey('.flotbtnId').then(v=>{
-					t.position_info = v;
-					t.thisPos = t.posfun();
-				})
-			})
-			// #ifdef H5
-			
-			window.addEventListener('scroll',function(){
-				t.thisPos = t.posfun();
-			})
-			// #endif
+			this.init();
 			
 		},
 		methods: {
+			init(){
+				let t = this;
+				this.$nextTick(function(){
+					t.isRender=true;
+					t.position_info = [{width:uni.upx2px(this.width),height:uni.upx2px(this.height)}];
+					t.thisPos = t.posfun();
+				})
+				// #ifdef H5
+				
+				window.addEventListener('scroll',function(){
+					t.thisPos = t.posfun();
+					
+				})
+				// #endif
+			},
 			getsafeJl(){
 				let sy = uni.getSystemInfoSync();
 				// #ifdef MP
@@ -296,6 +305,7 @@
 						let left = js.windowWidth;
 						if (this.position_info.length > 0) {
 							let w = this.position_info[0].width;
+							console.log(w);
 							return `transform:translateX(${this.offset[0]}px) translateY(${this.offset[1]}px);bottom:${safbo}px;left:${(left-w)/2}px`;
 				
 						} else if (this.position == 'left') {

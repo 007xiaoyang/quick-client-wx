@@ -3,7 +3,7 @@
 		<swiper :previous-margin="`${ani3d}rpx`" :next-margin="`${ani3d}rpx`" :style="{
 				width: w_s + 'rpx',
 				height: h_s + 'rpx'
-			}" :vertical="vertical" :autoplay="autoplay" :circular="circular" :interval="interval" :duration="duration"
+			}" :vertical="vertical" :autoplay="autoplay&&!isPlayVedio" :circular="circular" :interval="interval" :duration="duration"
 			:indicator-active-color="color_tmeme" :current="nowIndex" @change="change">
 			<block v-for="(item, index) in dataList" :key="index">
 				<swiper-item :style="{
@@ -21,7 +21,7 @@
 										width: (w_s - margin_px) + 'rpx'
 									}" @load="imgload($event, index)" :src="item.url"
 									:class="[round_num > 0 ? ` round-${round_num} overflow` : '']"></image>
-								<video :style="{
+								<video @play="isPlayVedio = true" @pause="isPlayVedio=false" @ended="isPlayVedio=false" :autoplay="nowIndex == index?true:false" :style="{
 										height: h_s + 'rpx',
 										width: (w_s - margin_px) + 'rpx'
 									}" v-if="item.dtype=='video'" :src="item.url"></video>
@@ -244,7 +244,8 @@
 				w_w: 0,
 				h_h: 0,
 				dataList: [],
-				dotIndex: 0
+				dotIndex: 0,
+				isPlayVedio:false,
 			};
 		},
 		async mounted() {
@@ -278,6 +279,7 @@
 			});
 		},
 		methods: {
+			
 			showdot(){
 				if(typeof this.dataList[this.nowIndex]=='string') return true;
 				if(typeof this.dataList[this.nowIndex]=='object'){

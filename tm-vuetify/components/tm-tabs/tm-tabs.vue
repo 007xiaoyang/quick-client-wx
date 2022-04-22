@@ -268,7 +268,13 @@ export default {
 							let now_Item_obj = res[0];
 							let now_Item_one = res[1];
 							
-							
+							if(now_Item_obj.id==now_Item_one.id){
+								
+								// now_Item_obj.right = Math.abs(now_Item_one.left)+now_Item_one.right;
+								// now_Item_one.right = Math.abs(now_Item_one.left)+now_Item_one.right;
+								// now_Item_obj.left=0;
+								// now_Item_one.left=0;
+							}
 							let nowId = t.guid + '_' + t.active;
 							let dleft = now_Item_obj.left;
 							let preventLeft = t.preantObjinfo.left;
@@ -278,9 +284,15 @@ export default {
 							if (dleft <= 0) {
 								dleft = escroolet + now_Item_obj.left;
 								if (now_Item_obj.left == 0 && escroolet == 0) {
-									lftc = (now_Item_obj.width - 24 - uni.upx2px(24) * 2) / 2 + 8 + 'px';
+									lftc = (now_Item_obj.width - 24 - uni.upx2px(24) * 2) / 2 + 12 + 'px';
+									
 								} else {
-									lftc = dleft + ch - 8 + 'px';
+									lftc = dleft + ch + 12 + 'px';
+									if(now_Item_obj.id==now_Item_one.id){
+										let ptch  = (now_Item_obj.width) / 2;
+										lftc = ptch-12+'px'
+									}
+									
 								}
 							} else {
 								acLeft = Math.abs(now_Item_one.left >= 0 ? 0 : now_Item_one.left) + Math.abs(dleft);

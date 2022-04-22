@@ -69,22 +69,17 @@
 		},
 		methods: {
 			formatTime(my_time){
-				var days    = my_time / 1000 / 60 / 60 / 24;
-				var daysRound = Math.floor(days);
-				var hours = my_time / 1000 / 60 / 60 - (24 * daysRound);
-				var hoursRound = Math.floor(hours);
-				var minutes = my_time / 1000 / 60 - (24 * 60 * daysRound) - (60 * hoursRound);
-				var minutesRound = Math.floor(minutes);
-				var seconds = my_time / 1000 - (24 * 60 * 60 * daysRound) - (60 * 60 * hoursRound) - (60 * minutesRound);
-				
-				// console.log('转换时间:', daysRound + '天', hoursRound + '时', minutesRound + '分', seconds + '秒');
-				// var time = hoursRound + ':' + minutesRound + ':' + seconds
+				var daysRound = Math.floor(my_time/1000/60/60/24);
+				var hoursRound = Math.floor(my_time/1000/60/60%24);
+				var minutesRound = Math.floor(my_time/1000/60%60);
+				var secondsRound = Math.floor(my_time/1000%60);
+				var millisecondRound = Math.floor(my_time % 1000);
 				let time = {
 						day:daysRound>9?daysRound:'0'+daysRound,//天
 						hour:hoursRound>9?hoursRound:'0'+hoursRound,//小时,
 						minutes:minutesRound>9?minutesRound:'0'+minutesRound,//分.
-						seconds:seconds>9?seconds:'0'+seconds//秒。
-					
+						seconds:secondsRound>9?secondsRound:'0'+secondsRound,//秒。
+						millisecond:millisecondRound>9?millisecondRound:'0'+millisecondRound//毫秒。
 					};
 					this.time_data = time;
 				return time;
@@ -94,7 +89,7 @@
 				let t = this;
 				clearInterval(this.timid);
 				this.timid = setInterval(()=>{
-					let lst = t.now + 1000;
+					let lst = t.now + 50;
 					if(lst == t.time){
 						t.$emit('finish')
 					}
@@ -104,7 +99,7 @@
 					}
 					t.now =lst;
 					t.$emit('change',t.time_data)
-				},1000)
+				},50)
 			},
 			// 停止，直接结束。
 			stop(){

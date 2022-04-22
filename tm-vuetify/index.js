@@ -8,6 +8,8 @@ import util from './tool/function/util'
 
 // 生成全局唯一guid字符串
 import guid from './tool/function/guid.js'
+// 节流函数
+import throttle from './tool/function/throttle.js'
 // 延迟函数
 import sleep from './tool/function/sleep.js'
 // 打乱数组的顺序
@@ -38,13 +40,15 @@ import upload from './tool/function/upload.js'
 import preview from './tool/function/preview.js'
 
 // obj转字样式style符串。  // -----自定
-import {objToString} from './tool/function/objToString.js'
+import {objToString, stringToObj} from './tool/function/objToString.js'
 // 日历库
 import calendar from './tool/function/calendar.js'
 
 import HandwritingSelf from './tool/function/signBoard.js'
 //抽奖模型。
 import choujiang from './tool/function/choujianggailv.js'
+
+
 
 
 // 配置信息
@@ -56,10 +60,11 @@ import request from './tool/request/index'
 
 
 const $tm = {
-	
+	throttle,
 	sleep,
 	request,
 	objToString,
+	stringToObj,
 	dayjs:dayjs.dayjs,
 	guid,
 	upload,

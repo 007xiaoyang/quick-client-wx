@@ -19,7 +19,15 @@
 				:disabled="disabled"
 				:loading="loading"
 				:open-type="openType"
+				:hover-start-time="hoverStartTime"
+				:hover-stay-time="hoverStaySime"
+				:hover-stop-propagation="hoverStopPropagation"
+				:send-message-img="sendMessageImg"
+				:send-message-path="sendMessagePath"
+				:send-message-title="sendMessageTitle"
+				:show-message-card="showMessageCard"
 				:class="[
+					
 					showValue ? 'showValue' : '',
 					titl ? 'text-' + color_tmeme : '',
 					vertical ? 'flex-col flex-center' : 'flex-center',
@@ -31,7 +39,8 @@
 					text ? 'text ' : '',
 					plan ? 'plan outlined' : '',
 					titl ? 'titl' : '',
-					'round-' + round,
+					
+					fab?'rounded':'round-' + round,
 					customClass_puted
 				]"
 				:style="{
@@ -47,28 +56,31 @@
 							v-if="!fab && icon"
 							:class="[`${prefx_computed} ${icon}`, fontColor ? `text-${colors.color}` : '', black_tmeme ? 'opacity-6' : '', 'px-12']"
 							:style="{
-								fontSize: `${icon_size.px}px`
+								fontSize: `${icon_size.px}px`,
+								lineHeight:'normal'
 							}"
 						></text>
 						<text
 							v-if="fab && icon && !loading && !titl"
 							:class="[`${prefx_computed} ${icon}`, fontColor ? `text-${colors.color}` : '', black_tmeme ? 'opacity-6' : '']"
 							:style="{
-								fontSize: `${icon_size.px}px`
+								fontSize: `${icon_size.px}px`,
+								lineHeight:'normal'
 							}"
 						></text>
 						<text
 							v-if="fab && icon && !loading && titl"
 							:class="[`${prefx_computed} ${icon}`, fontColor ? `text-${color_tmeme}` : '', black_tmeme ? 'opacity-6' : '']"
 							:style="{
-								fontSize: `${icon_size.px}px`
+								fontSize: `${icon_size.px}px`,
+								lineHeight:'normal'
 							}"
 						></text>
 					</block>
 					<block v-if="vtype == false"><tm-icons :size="icon_size.upx" :name="icon"></tm-icons></block>
 				</slot>
 
-				<view v-if="!fab || showValue" class="d-inline-block tm-button-label " :style="{ fontSize: font_size }" :class="[fontColor ? `text-${colors.color}` : '']">
+				<view v-if="!fab || showValue" class="d-inline-block tm-button-label flex-shrink" :style="{ fontSize: font_size }" :class="[fontColor ? `text-${colors.color}` : '']">
 					<slot name="default" :data="label">{{ label }}</slot>
 				</view>
 			</button>
@@ -88,7 +100,7 @@
  * @property {Function} click
  * @property {Boolean} disabled = [true|false] 是否禁用
  * @property {Boolean} loading = [true|false] 是否加载中
- * @property {String} open-type = [contact|getPhoneNumber|getUserInfo|launchapp|share|openSetting] 同原生btn相同
+ * @property {String} open-type = [contact|getPhoneNumber|getUserInfo|launchapp|share|openSetting] 同原生btn相同,//当等于getUserProfile时，自动获取微信授权。
  * @property {Boolean} block = [true|false] 是否独占一行
  * @property {Boolean} show-value = [true|false] fab模式是隐藏文字的。如果这个设置为true,不管在什么情况下都会显示文字。
  * @property {String} url = [] 默认"",如果提供将会跳转连接。
@@ -113,6 +125,7 @@
  * @property {String|Number} height = [] 默认 "", 按钮高, 单位px ,可以是百分比如果不设置block为true时，此项设置无效。
  * @property {String|Number} round = [] 默认 2, 圆角
  * @property {String|Number} navtie-type = [form] 默认 :'', 可选值form，提供此属性为form时，事件会被表单接替，会触发表单提交事件。
+ * @property {String} userProfileError = ['auto'] 默认:'auto' 仅open-type='getUserProfile'时有效，当微信授权失败提示的信息，默认为auto,如果非auto将显示自定义错误提示。如果为''，将不显示错误提示。
  * @example <tm-button>确定</tm-button>
  */
 import tmIcons from '@/tm-vuetify/components/tm-icons/tm-icons.vue';
@@ -120,6 +133,18 @@ export default {
 	components: { tmIcons },
 	name: 'tm-button',
 	props: {
+		hoverStartTime:20,
+		hoverStaySime:70,
+		appParameter:String,
+		hoverStopPropagation:{
+			type:Boolean,
+			default:false
+		},
+		sessionFrom:String,
+		sendMessageTitle:String,
+		sendMessagePath:String,
+		sendMessageImg:String,
+		showMessageCard:String,
 		navtieType: {
 			type: String,
 			default: '' //form
@@ -174,6 +199,7 @@ export default {
 			default: ''
 		},
 		// 同原生btn相同。contact|getPhoneNumber|getUserInfo|launchapp|share|openSetting
+		//当等于getUserProfile时，自动获取微信授权。
 		openType: {
 			type: String,
 			default: ''
@@ -258,6 +284,11 @@ export default {
 		fllowTheme: {
 			type: Boolean | String,
 			default: true
+		},
+		//当微信授权失败提示的信息，默认为auto,如果非auto将显示自定义错误提示。如果为''，将不显示错误提示。
+		userProfileError:{
+			type:String,
+			default:'auto'
 		}
 	},
 	created() {
@@ -359,11 +390,11 @@ export default {
 		sizes: function() {
 			if (!isNaN(this.width) || !isNaN(this.height)) return;
 			if (this.size == 'xs') {
-				return this.fab ? 'fabxs text-size-xs rounded' : 'wxs round-1 text-size-xs';
+				return this.fab ? 'fabxs text-size-xs rounded' : 'wxs  round-1 text-size-xs';
 			} else if (this.size == 's') {
-				return this.fab ? 'fabs text-size-xs rounded' : 'ws round-1 text-size-s';
+				return this.fab ? 'fabs text-size-xs rounded' : 'ws  round-1 text-size-s';
 			} else if (this.size == 'm') {
-				return this.fab ? 'fabm text-size-xs rounded' : 'wm px-20 round-1 text-size-n';
+				return this.fab ? 'fabm text-size-xs rounded' : 'wm  round-1 text-size-n';
 			} else if (this.size == 'n') {
 				return this.fab ? 'fabn text-size-xs rounded' : 'wn round-1 text-size-n';
 			} else if (this.size == 'l') {
@@ -452,10 +483,16 @@ export default {
 				    desc: '需要获取用户信息',
 				    lang: 'zh',
 				    complete: function (userProfile) {
-						
 						if(userProfile.errMsg !='getUserProfile:ok'){
+							if(t.userProfileError==''||t.userProfileError=='true') return;
+							if(t.userProfileError!='auto'){
+								uni.showToast({
+									title:t.userProfileError,icon:'error',mask:true
+								})
+								return;
+							}
 							uni.showToast({
-								title:userProfile.errMsg
+								title:userProfile.errMsg,icon:'error',mask:true
 							})
 							return;
 						}
@@ -463,6 +500,13 @@ export default {
 				        t.$emit('getUserProfile', userProfile);
 				    },
 					fail: (error) => {
+						if(t.userProfileError==''||t.userProfileError=='true') return;
+						if(t.userProfileError!='auto'){
+							uni.showToast({
+								title:t.userProfileError,icon:'error',mask:true
+							})
+							return;
+						}
 						uni.showToast({
 							title:error
 						})
@@ -570,22 +614,22 @@ export default {
 			// line-height: 24upx;
 			text-align: center;
 			// padding: 0 !important;
-			padding: 0 3upx;
+			padding: 0 12upx;
 		}
 		&.ws {
 			min-width: 90upx;
 			height: 48upx !important;
-
+			
 			// line-height: 24upx;
 			text-align: center;
-			padding: 0 5upx;
+			padding: 0 16upx;
 		}
 		&.wm {
 			min-width: 140upx;
 			height: 64upx !important;
 			// line-height: 88upx;
 			text-align: center;
-			padding: 0 15upx;
+			padding: 0 24upx;
 		}
 		&.wn {
 			min-width: 240upx;
@@ -593,21 +637,21 @@ export default {
 			// line-height: 88upx;
 			text-align: center;
 			// padding: 0 !important;
-			padding: 0 15upx;
+			padding: 0 32upx;
 		}
 		&.wl {
 			min-width: 280upx;
 			height: 72upx !important;
 			// line-height: 88upx;
 			text-align: center;
-			padding: 0 15upx;
+			padding: 0 32upx;
 		}
 		&.wg {
 			min-width: 400upx;
 			height: 76upx !important;
 			// line-height: 88upx;
 			text-align: center;
-			padding: 0 15upx;
+			padding: 0 32upx;
 		}
 
 		&.plan {
@@ -638,7 +682,7 @@ export default {
 	}
 	&.d-block {
 		button {
-			padding: 30upx 0;
+			// padding: 30upx 0;
 			font-size: 32upx;
 			&.plan {
 				box-shadow: none !important;

@@ -5,7 +5,7 @@
 				<view class="pl-10 text-size-g py-1">诚信商城</view>
 			</template>
 		</tm-menubars>
-		
+
 		<scroll-view class="center_warp" scroll-y :style="{height: bodyHeight + 'px'}">
 			<home v-if="tabIndex == 0" class="fulled-height"></home>
 			<classify v-else-if="tabIndex == 1" class="fulled-height"></classify>
@@ -14,7 +14,7 @@
 			<my v-else-if="tabIndex == 4" class="fulled-height"></my>
 		</scroll-view>
 
-		<tm-bottomnavigation class="tabbar" icon-color="pink" icon-color-grey="grey-lighten-1" :list="tabbar" 
+		<tm-bottomnavigation class="tabbar" icon-color="pink" icon-color-grey="grey-lighten-1" :list="tabbar"
 			@change="tabBarChange"></tm-bottomnavigation>
 	</view>
 </template>
@@ -26,13 +26,19 @@
 	import Cart from './cart.vue'
 	import My from './my.vue'
 	export default {
-		components: { Home, Classify, News, Cart, My},
+		components: {
+			Home,
+			Classify,
+			News,
+			Cart,
+			My
+		},
 		data() {
 			return {
 				bodyHeight: '100%',
 				cardBar: 0,
 				menuTitle: '首页',
-				tabIndex: 2,
+				tabIndex: 3,
 				tabbar: [{
 						icon: 'icon-position-fill',
 						value: '首页',
@@ -68,11 +74,12 @@
 		created() {
 			let sys = uni.getSystemInfoSync();
 			this.cardBar = ((sys.screenHeight - sys.safeArea.bottom) + uni.upx2px(52 + 46));
-			this.bodyHeight = (sys.screenHeight - ((sys.screenHeight - sys.safeArea.bottom) + (sys.statusBarHeight + 45)) - uni.upx2px(52 + 46));
+			this.bodyHeight = (sys.screenHeight - ((sys.screenHeight - sys.safeArea.bottom) + (sys.statusBarHeight + 45)) -
+				uni.upx2px(52 + 46));
 		},
 		onLoad(option) {
 			console.log(option)
-			
+
 		},
 		methods: {
 			// 选中tab回调事件

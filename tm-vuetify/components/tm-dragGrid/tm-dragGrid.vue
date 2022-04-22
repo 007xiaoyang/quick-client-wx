@@ -228,13 +228,6 @@
 				})
 				t.listData = elList;
 			
-				// #ifdef MP || APP
-				try{
-					uni.vibrateShort()
-				}catch(e){
-					//TODO handle the exception
-				}
-				// #endif
 			},
 			m_end(event,index){
 				

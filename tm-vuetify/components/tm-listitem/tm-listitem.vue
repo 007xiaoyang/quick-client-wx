@@ -4,14 +4,14 @@
 		<view
 
 			@click="click"
-			:style="{
-				bakcground:bgColor?bgColor:'default'
-			}"
+			:style="[
+				bgColor?{background:bgColor}:''
+			]"
 			:class="[
 				
 				classStyle,
 				`mx-${pz_themeCus.margin[0]} my-${pz_themeCus.margin[1]}`,
-				disabled===true?(disabledColor + (black_tmeme?' bk ':'')) :(black_tmeme?'grey-darken-4 bk ':color),
+				disabled===true?(disabledColor + (black_tmeme?' bk ':'')) :(black_tmeme?'grey-darken-4 bk ':(bgColor?'':color)),
 				dense?'nom':'',
 				`shadow-${pz_themeCus.shadow}`,
 				`round-${pz_themeCus.round}`,
@@ -42,18 +42,18 @@
 							</view>
 						</view>
 					</view>
-					<view class="right text-grey-lighten-1 flex-end" :class="[black_tmeme ? 'bk' : '']">
-						<view class="text-size-s pr-10">
+					<view class="right text-grey-lighten-1 flex-end vertical-align-middle" :class="[black_tmeme ? 'bk' : '']">
+						<view class="text-size-s pr-10 d-inline-block">
 							<slot name="rightValue" :value="value">{{ value }}</slot>
 						</view>
 						<slot name="rightIcon" :icon="rightIcon">
-							<tm-icons :color="rightIconColor" dense v-if="showRightIcon" :size="rightIconSize" :name="!showContent ? rightIcon : 'icon-angle-down'"></tm-icons>
+							<tm-icons style="line-height: normal;" :color="rightIconColor" dense v-if="showRightIcon" :size="rightIconSize" :name="!showContent ? rightIcon : 'icon-angle-down'"></tm-icons>
 						</slot>
 					</view>
 				</view>
 				<view @click.stop="" class="group pt-24" v-if="showContent && group === true"><slot name="group" :show="showContent"></slot></view>
 			</view>
-			<view class="tm-listitem-border" :class="[pz_themeCus.borderBottom ? 'border-grey-lighten-4-b-1 ' : '', color, 'mx-' + pz_themeCus.padding[0], black_tmeme ? 'bk' : '']"></view>
+			<view class="tm-listitem-border" :class="[pz_themeCus.borderBottom ? 'border-grey-lighten-4-b-1 ' : '',color, 'mx-' + pz_themeCus.padding[0], black_tmeme ? 'bk' : '']"></view>
 		</view>
 	</view>
 </template>
@@ -167,7 +167,7 @@ export default {
 		},
 		leftIconSize: {
 			type: String | Number,
-			default: '38'
+			default: '32'
 		},
 		leftIcon: {
 			type: String,
@@ -231,13 +231,13 @@ export default {
 		margin: {
 			type: Array,
 			default: () => {
-				return [32, 24];
+				return [32, 20];
 			}
 		},
 		padding: {
 			type: Array,
 			default: () => {
-				return [24, 24];
+				return [24, 20];
 			}
 		},
 		flat:{

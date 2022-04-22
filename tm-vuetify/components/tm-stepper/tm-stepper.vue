@@ -1,27 +1,31 @@
 <template>
 	<view class="tm-stepper  d-inline-block">
-		<view class="flex-center" :style="{ minWidth: 200 + 'rpx', width: `${width}rpx` }">
-			<tm-button @touchcancel="endlongpressEvent" @touchend="endlongpressEvent"
-				@touchstart="$emit('touchstart', 'minus')" @longpress="longpressEvent('-')" :fllowTheme="fllowTheme"
-				:disabled="isJianDisabled || disabled ? true : false"
-				:shadow="isJianDisabled || disabled ? 0 : shadwo_num" :black="black_tmeme" @click="setStep('-')"
-				:item-class="circular?'':` round-l-${round} `" icon-size="24" :round="circular?round:0"
-				:theme="disabled || isJianDisabled ? '' : color_tmeme" style="width:60rpx;" :height="height" block icon="icon-minus">
-			</tm-button>
+		<view class="flex-center" :style="{  width: `${width}rpx` }">
+			<view :class="[isJianDisabled||disabled?'opacity-6 gray':'']">
+				<tm-button @touchcancel="endlongpressEvent" @touchend="endlongpressEvent"
+					@touchstart="$emit('touchstart', 'minus')" @longpress="longpressEvent('-')" :fllowTheme="fllowTheme"
+					:disabled="isJianDisabled || disabled ? true : false"
+					:shadow="isJianDisabled || disabled ? 0 : shadwo_num" :black="black_tmeme" @click="setStep('-')"
+					:item-class="circular?' pa-0':` round-l-${round} `" icon-size="24" :round="circular?round:0"
+					:theme="disabled ? '' : color_tmeme" :width="height" :height="height" block icon="icon-minus">
+				</tm-button>
+			</view>
 			<input v-if="fixed!=0" @blur="inputVal" @input="inputVal" :disabled="(disabled||disabledInput)"
-				v-model="setVal" type="digit" :style="{ height: `${height}rpx`, width: 'calc(100% - 120rpx)' }"
+				v-model="setVal" type="digit" :style="{ height: `${height}rpx`, width: `calc(100% - ${height}rpx)` }"
 				class="text-align-center  text-size-n fulled"
-				:class="[`text-${font_color}`, black_tmeme ? 'grey-darken-4 bk' : '',circular?'':'grey-lighten-4']" />
+				:class="[`text-${font_color}`, black_tmeme&&!circular ? 'grey-darken-4 bk' : '',black_tmeme? 'text-grey-lighten-4' : '',circular?'':'grey-lighten-4']" />
 			<input v-if="fixed==0" @blur="inputVal" @input="inputVal" :disabled="(disabled||disabledInput)"
-				v-model="setVal" type="number" :style="{ height: `${height}rpx`, width: 'calc(100% - 120rpx)' }"
+				v-model="setVal" type="number" :style="{ height: `${height}rpx`, width: `calc(100% - ${height}rpx)` }"
 				class="text-align-center grey-lighten-4 text-size-n fulled"
-				:class="[`text-${font_color}`, black_tmeme ? 'grey-darken-4 bk' : '',circular?'':'grey-lighten-4']" />
-			<tm-button @touchcancel="endlongpressEvent" @touchend="endlongpressEvent"
-				@touchstart="$emit('touchstart', 'add')" @longpress="longpressEvent('+')" :fllowTheme="fllowTheme"
-				:shadow="isJianDisabled || disabled ? 0 : shadwo_num" :black="black_tmeme" @click="setStep('+')"
-				:item-class="circular?'':` round-r-${round} `" icon-size="24"  :round="circular?round:0"
-				:theme="disabled || isAddDisabled ? '' : color_tmeme" :disabled="isAddDisabled || disabled ? true : false"
-				style="width:60rpx;" :height="height" block icon="icon-plus"></tm-button>
+				:class="[`text-${font_color}`, black_tmeme&&!circular ? 'grey-darken-4 bk' : '',black_tmeme? 'text-grey-lighten-4' : '',circular?'':'grey-lighten-4']" />
+			<view :class="[isAddDisabled||disabled?'opacity-6 gray':'']">
+				<tm-button @touchcancel="endlongpressEvent" @touchend="endlongpressEvent"
+					@touchstart="$emit('touchstart', 'add')" @longpress="longpressEvent('+')" :fllowTheme="fllowTheme"
+					:shadow="isAddDisabled || disabled ? 0 : shadwo_num" :black="black_tmeme" @click="setStep('+')"
+					:item-class="circular?' pa-0':` round-r-${round} `" icon-size="24" :round="circular?round:0"
+					:theme="disabled ? '' : color_tmeme" :disabled="isAddDisabled || disabled ? true : false"
+					:width="height" :height="height" block icon="icon-plus"></tm-button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -103,7 +107,7 @@
 				type: String | Number,
 				default: 3
 			},
-			circular:{
+			circular: {
 				type: Boolean | String,
 				default: false
 			},
@@ -133,17 +137,9 @@
 				default: 180
 			},
 			//回调函数。默认返回true即增减，否则不执行增减。
-			callback:{
-				type: Function,
-				default: ()=>{
-					return (val) => {
-						return true
-					}
-				}
-			},
-			disabledColor: { // 超过最小最大值时 禁用按钮颜色
-				type: Boolean | String,
-				default: false
+			callback: {
+				type: Function | Object | Boolean,
+				default: true
 			}
 		},
 		data() {
@@ -197,10 +193,16 @@
 		methods: {
 			async setStep(ty) {
 				if (this.disabled) return;
-				uni.showLoading({title:'...',mask:true})
-				let p = await this.callasync();
-				uni.hideLoading();
-				if(p!==true) return;
+
+				if (typeof this.callback !== 'boolean' && this.callback !== true) {
+					uni.showLoading({
+						title: '...',
+						mask: true
+					})
+					let p = await this.callasync();
+					uni.hideLoading();
+					if (p !== true) return;
+				}
 				this.$nextTick(function() {
 					var val = parseFloat(this.value);
 					if (!isNaN(this.fixed) && this.fixed > 0) {
@@ -296,14 +298,14 @@
 				clearInterval(this.timeid);
 			},
 			//异步回调
-			async callasync(){
+			async callasync() {
 				let verify = this.callback;
 				verify = await verify()
-				if(typeof verify ==='function'){
+				if (typeof verify === 'function') {
 					verify = await verify()
 				}
 				if (typeof verify !== 'boolean') verify = true;
-				
+
 				return verify;
 			}
 		}

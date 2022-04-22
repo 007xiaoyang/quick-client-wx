@@ -15,18 +15,18 @@
 						<view>
 							<tm-icons dense @click="preYear" name="icon-angle-double-left" color="grey-lighten-1"></tm-icons>
 							
-							<text class="px-16"></text>
+							<text class="px-24"></text>
 							<tm-icons dense @click="preMonth" name="icon-angle-left" color="grey-lighten-1"></tm-icons>
 							
 							<!-- <text class="px-8 "></text> -->
 						</view>
-						<view class="text-size-n text-weight-b px-32">{{titleValue}}</view>
+						<view class="text-size-n text-weight-b px-40">{{titleValue}}</view>
 						<view>
 							<!-- <text class="px-8"></text> -->
 							
 							<tm-icons dense @click="nextMonth" name="icon-angle-right" color="grey-lighten-1"></tm-icons>
 							
-							<text class="px-16"></text>
+							<text class="px-24"></text>
 							
 							<tm-icons dense @click="nextYear" name="icon-angle-double-right" color="grey-lighten-1"></tm-icons>
 							
@@ -93,7 +93,7 @@
 						</tm-col>
 					</tm-row>
 				</view>
-				<view class="" style="height: 60rpx;"></view>
+				<view class="" style="height: 40rpx;"></view>
 				<view class="text-align-center px-32   text-grey ">{{selectedVal}}</view>
 				<view class="pa-32">
 					<tm-button :black="black_tmeme"  @click="confirm" block itemeClass="round-24" :theme="btnColor?btnColor:color_tmeme" fontSize="32">{{btnText}}</tm-button>
@@ -385,8 +385,8 @@
 				
 			},
 			isSelectedDateClass(date){
-				let rangeL = 'round-l-4 round-tr-0 round-br-0'
-				let rangeR = 'round-r-4 round-tl-0 round-bl-0'
+				let rangeL = 'round-l-24 round-tr-0 round-br-0'
+				let rangeR = 'round-r-24 round-tl-0 round-bl-0'
 				let index = this.selectedDateClass.findIndex((item)=>{
 					let val = date.year+'-'+date.month+'-'+date.day;
 					return val == item.date;
@@ -773,11 +773,11 @@
 					if(this.start&&!this.end){
 						
 						this.$nextTick(function(){
-							let selected = new Date(e.year,e.month,e.day).getTime();
-							let selectedStart = new Date(this.start.year,this.start.month,this.start.day).getTime()
+							let selected = new Date(e.year+"/"+e.month+"/"+e.day).getTime();
+							
+							let selectedStart = new Date(this.start.year+"/"+this.start.month+"/"+this.start.day).getTime()
 							if(selected <= selectedStart)
 							{
-								
 								// this.clearRangeNowDay();
 								let enjh = uni.$tm.deepClone(this.start);
 								enjh.start = selected<selectedStart?false:true;
@@ -792,8 +792,6 @@
 										break;
 									}
 								}
-								
-								
 								if(index_check>-1){
 									this.nowData.splice(index_check,1,this.end);
 								}

@@ -151,7 +151,7 @@
 									:color="color"
 									:border-bottom="false"
 									:input-type="item.type || 'text'"
-									v-model="item.value"
+									:value.sync="item.value"
 								></tm-input>
 							</block>
 							<block v-if="item.model == 'slider'&&rendIdx>=index" >
@@ -434,10 +434,9 @@ export default {
 					for (let k = 0; k < ic.length; k++) {
 						let children = ic[k]['children'];
 						if (children) {
-							if (ic[k]['model'] == 'checkbox' || (ic[k]['model'] == 'radio' && children.length > 0)) {
+							if (ic[k]['model'] == 'checkbox'||ic[k]['model'] == 'listCheckbox'||ic[k]['model'] == 'list' || (ic[k]['model'] == 'radio' && children.length > 0)) {
 								for (let z = 0; z < children.length; z++) {
 									let im = children[z];
-
 									im['checked'] = false;
 								}
 							}
@@ -446,6 +445,10 @@ export default {
 								ic[k].value = 0;
 							} else if (ic[k]['model'] == 'input') {
 								ic[k].value = '';
+							} else if (ic[k]['model'] == 'pickers') {
+								ic[k].value = [];
+							} else if (ic[k]['model'] == 'pickersDate') {
+								ic[k].value = "";
 							}
 						}
 					}
@@ -521,13 +524,13 @@ export default {
 	position: relative;
 	.tm-dropDownMenu-bar {
 		position: relative;
-		z-index: 19;
+		z-index: 303;
 	}
 	.tm-dropDownMenu-body {
 		background-color: rgba(0, 0, 0, 0.35);
 		min-height: 150upx;
 		position: absolute;
-		z-index: 20;
+		z-index: 304;
 		width: 100%;
 	}
 }

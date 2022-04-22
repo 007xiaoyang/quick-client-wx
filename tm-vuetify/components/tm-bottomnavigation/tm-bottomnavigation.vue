@@ -5,7 +5,7 @@
 			left: position != 'static' ? offsetLeft + 'px' : '0px',
 			top: position == 'top' ? top_px + 'px' : 'auto',
 			bottom: position == 'bottom' ? bottom_px + 'px' : 'auto'
-		}" class="tm-bottomnavigation py-10" :class="[
+		}" class="tm-bottomnavigation " :class="[
 			black_tmeme ? 'grey-darken-5' : '',
 			black_tmeme ? 'bk' : '',
 			'round-' + round,
@@ -15,7 +15,7 @@
 			border === 'bottom' ? 'border-b-1' : '',
 			'sheetIDX'
 		]">
-		<view :style="{ background: bgColor }" class=" flex-between ">
+		<view :style="{ background: bgColor }" class=" flex-between py-10">
 
 			<block v-for="(item, index) in listDate" :key="index">
 				<view :style="{
@@ -56,8 +56,8 @@
 											flexShrink: 0
 										}">
 										<view
-											:class="[item['customColor'] ? item['customColor'] : (bgColor||'red'), black_tmeme ? 'bk' : '']"
-											style="width: 90upx;height: 90upx;" class="rounded  flex-center">
+											:class="[item['customColor'] ? item['customColor'] : (bgColor?'':'red'), black_tmeme ? 'bk' : '']"
+											:style="{width: '90rpx',height: '90rpx',background:bgColor?bgColor:''}" class="rounded  flex-center">
 											<tm-icons :black="black_tmeme" :color="item['customFontColor'] || iconColorGrey"
 												:size="data.size" :name="data.icon"></tm-icons>
 										</view>
@@ -76,7 +76,7 @@
 		</view>
 		<!-- 安全区域的高度。 -->
 
-		<view v-if="safe" :style="{ height: safeBottomeHeight + 'px' }"></view>
+		<view v-if="safe" :style="{ height: safeBottomeHeight + 'px',background: bgColor }"></view>
 	</view>
 
 	<!-- 	
@@ -424,7 +424,7 @@
 <style>
 	page,
 	body {
-		padding-bottom: 167upx;
+		padding-bottom: 167rpx;
 	}
 </style>
 <style lang="scss" scoped>

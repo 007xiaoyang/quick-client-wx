@@ -28,6 +28,7 @@
 					</view>
 				</scroll-view>
 			</view>
+			<view class="bottomHeight"></view>
 		</block>
 
 		<view v-if="value===true&&position_sv == 'center'" class="tm-poup " :class="[
@@ -305,7 +306,9 @@
 </script>
 
 <style lang="scss" scoped>
-
+	.bottomHeight{
+		height: var(--window-bottom);
+	}
 	.tm-poup {
 		position: fixed;
 		z-index: 452;

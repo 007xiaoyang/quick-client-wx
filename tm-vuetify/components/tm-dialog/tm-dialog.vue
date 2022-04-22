@@ -8,8 +8,11 @@
 		}"
 	>
 		<view @click.stop="" :class="[show ? 'success' : '']">
-			<view :class="[clickOverlay ? 'clickover' : '']">
+			<view class="relative" :class="[clickOverlay ? 'clickover' : '']">
 				<tm-sheet :black="black_tmeme" :padding="[0, 0]" classname="overflow" :width="600" :round="round" shadow="10">
+					<view class="close absolute r-19 t--19" v-if="showClose">
+						<tm-icons :size="46" color="red" name="icon-times-circle" @click="close()"></tm-icons>
+					</view>
 					<view class="text-size-g flex-center text-weight-b px-32 pt-32 " :class="[black_tmeme ? 'bk' : '', bottomBorder ? 'border-b-1' : '']">
 						<slot name="title">{{ title }}</slot>
 					</view>
@@ -33,11 +36,12 @@
 								:black="black_tmeme"
 								@click="concelClick"
 								v-if="showCancel"
-								:theme="black_tmeme ? 'grey-darken-4' : color_tmeme"
+								:theme="black_tmeme ? 'grey-darken-4' : cancel_color_tmeme"
 								round="0"
 								shadow="0"
 								style="width: 50%;"
 								block
+								:loading="loading"
 							>
 								{{ cancelText }}
 							</tm-button>
@@ -53,6 +57,7 @@
 									width: showCancel ? '50%' : '100%'
 								}"
 								block
+								:loading="loading"
 							>
 								{{ confirmText }}
 							</tm-button>
@@ -65,12 +70,13 @@
 								:black="black_tmeme"
 								@click="concelClick"
 								v-if="showCancel"
-								:theme="black_tmeme ? 'grey-darken-4' : color_tmeme"
+								:theme="black_tmeme ? 'grey-darken-4' : cancel_color_tmeme"
 								round="24"
 								font-size="30"
 								shadow="0"
 								style="width: 46%;"
 								block
+								:loading="loading"
 							>
 								{{ cancelText }}
 							</tm-button>
@@ -87,6 +93,7 @@
 									width: showCancel ? '46%' : '100%'
 								}"
 								block
+								:loading="loading"
 							>
 								{{ confirmText }}
 							</tm-button>
@@ -203,14 +210,23 @@ export default {
 		disabled: {
 			type: Boolean | String,
 			default: false
+		},
+		beforeClose: { // 是否拦截按钮事件，如为true，则不会关闭对话框，关闭需要手动执行 uni-popup 的 close 方法
+			type: Boolean | String,
+			default: false
+		},
+		showClose: {
+			type: Boolean | String,
+			default: false
 		}
 	},
 	computed: {
 		show: {
 			get: function() {
-				return this.value;
+				return this.pageShow;
 			},
 			set: async function(val) {
+				this.pageShow = val;
 				this.$emit('input', val);
 				this.$emit('update:value', val);
 			}
@@ -224,13 +240,24 @@ export default {
 				return this.$tm.vx.state().tmVuetify.color;
 			}
 			return this.confirmColor;
+		},
+		cancel_color_tmeme: function() {
+			return this.cancelColor;
+		},
+	},
+	watch: {
+		value(val) {
+			this.show = val;
 		}
 	},
 	data() {
 		return {
 			inputValSd: '',
 			sysinfo: 0,
-			clickOverlay: false
+			clickOverlay: false,
+			loading: false,
+			arg: null,
+			pageShow: false,
 		};
 	},
 	created() {
@@ -254,6 +281,17 @@ export default {
 		this.show = this.value;
 	},
 	methods: {
+		open() {
+			this.arg = arguments[0] ? arguments[0] : null;
+			this.show = true;
+		},
+		close() {
+			this.show = false;
+			this.loading = false;
+			this.$emit('input', false);
+			this.$emit('update:value', false);
+		},
+		
 		overCloseCHange() {
 			if (this.overClose) {
 				this.concelClick();
@@ -270,6 +308,10 @@ export default {
 			});
 		},
 		confirmClick() {
+			if (this.loading) return
+			if (this.beforeClose)
+				this.loading = true;
+	
 			if (this.model == 'confirm') {
 				if (!this.inputValSd) {
 					uni.$tm.toast('请输入内容');
@@ -278,18 +320,17 @@ export default {
 				}
 				this.$emit('confirm', this.inputValSd);
 			} else {
-				this.$emit('confirm');
+				this.$emit('confirm', this.arg);
 			}
-			if (this.disabled == false) {
-				this.show = false;
-			}
+			if (this.disabled) return
+			this.close()
 		},
 		suren(e) {
 			this.$emit('update:inputVal', this.inputValSd);
 		},
 		concelClick() {
-			this.$emit('concel');//错误的拼写兼容
-			this.$emit('cancel');//正常的拼写
+			this.$emit('concel', this.arg);//错误的拼写兼容
+			this.$emit('cancel', this.arg);//正常的拼写
 			if (this.disabled == false) {
 				this.show = false;
 			}

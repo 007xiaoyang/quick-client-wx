@@ -181,22 +181,27 @@
 			},
 			async setInits(){
 				this.$nextTick(async function() {
-					let p = await this.$Querey('.tm-album',this).catch(e => {});
-					if (!p[0]) return;
-					let grid = this.grid || 1;
-					let size = (p[0].width+this.gutter)/grid;
-					let gutter = this.gutter*2
-					let ratio = 750/uni.upx2px(750);
-					let blv = size * ratio - gutter;
-					this.alb_body_size = size * ratio;
-					this.alb_wk_body_size = p[0].width*ratio+this.gutter*2+(grid*2);
-					this.alb_size = blv;
+					let t = this;
+					this.$tm.sleep(150).then(async function(){
+						let p = await t.$Querey('.tm-album',t).catch(e =>{});
+						if (!p[0]) return;
+						let grid = t.grid || 1;
+						let size = (p[0].width+t.gutter)/grid;
+						let gutter = t.gutter*2
+						let ratio = 750/uni.upx2px(750);
+						let blv = size * ratio - gutter;
+						t.alb_body_size = size * ratio;
+						t.alb_wk_body_size = p[0].width*ratio+t.gutter*2+(grid*2);
+						t.alb_size = blv;
+					})
+					
+					
 				
 				});
 			},
 			clickAlbum(item,index){
 				if(this.preview){
-					uni.$tm.preview.previewImg(item[this.rangKey],this.listData,this.rangKey);
+					uni.$tm.preview(item[this.rangKey],this.listData,this.rangKey);
 				}
 				this.$emit('click',{item,index})
 			},

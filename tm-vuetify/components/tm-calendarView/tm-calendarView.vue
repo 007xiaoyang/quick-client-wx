@@ -11,18 +11,18 @@
 						<view>
 							<tm-icons dense @click="preYear" name="icon-angle-double-left" color="grey-lighten-1"></tm-icons>
 							
-							<text class="px-16"></text>
+							<text class="px-24"></text>
 							<tm-icons dense @click="preMonth" name="icon-angle-left" color="grey-lighten-1"></tm-icons>
 							
 							
 						</view>
-						<view class="text-size-n text-weight-b px-32">{{titleValue}}</view>
+						<view class="text-size-n text-weight-b px-40">{{titleValue}}</view>
 						<view>
 							
 							
 							<tm-icons dense @click="nextMonth" name="icon-angle-right" color="grey-lighten-1"></tm-icons>
 							
-							<text class="px-16"></text>
+							<text class="px-24"></text>
 							
 							<tm-icons dense @click="nextYear" name="icon-angle-double-right" color="grey-lighten-1"></tm-icons>
 							
@@ -48,25 +48,33 @@
 						:key="index"><text class="text-size-s py-16">{{item}}</text>
 						</tm-col>
 						<!-- #endif -->
-						<tm-col :round="(item.start||item.end||item.checked)?4:0" @click="day_danxuanclick(item,index)"  
+						<tm-col :round="(item.start||item.end||item.checked)?4:0" @click="day_danxuanclick(item,index)"
 						:color="item.beginEnd?(item.checked===true||item.start||item.end?color_tmeme+(black_tmeme?' bk ':''):(item.guocheng?color_tmeme+' text  opacity-7 '+(black_tmeme?'bk':''):'')):''" 
-						:custom-class=" isSelectedDateClass(item) "
-						align="center" width="14.28%" v-for="(item,index) in nowData"
+						:custom-class="isSelectedDateClass(item)"
+						align="middle" width="14.28%" v-for="(item,index) in nowData"
 						:key="index">
 							<view class="tm-calendarView-col flex-center flex-col" :class="[black&&!item.beginEnd?' opacity-2 ':'']">
 								<text class="text-size-n"
 								:class="[
-									!item.nowMonth&&!item.guocheng&&!item.checked&&!item.start&&!item.end?'text-grey':'',
+									!item.nowMonth&&!item.guocheng&&!item.checked&&!item.start&&!item.end?(black_tmeme?'text-grey-darken-3':'text-grey-lighten-1'):'',
 									item.checked||item.start||item.end?'text-white':'',
-									item.guocheng?'text-'+color_tmeme:'',
+									item.guocheng?' text text-'+color_tmeme:'',
 									!item.beginEnd?'text-grey-lighten-3':''
 								]"
 								>{{item.day}}</text>
-								<text class="text-size-xs  text_bl"
-								:class="[
-									isSelectedDateClass(item)
-								]"
-								>{{item.text?item.text:(showNongli?item.nongli.day:'')}}</text>
+								<view class="text-size-xs  text_bl"
+								>
+								<block v-if="item.start">
+									开始
+								</block>
+								<block v-if="item.end">
+									结束
+								</block>
+								
+								<block v-if="!item.start&&!item.end">
+									{{item.text?item.text:(showNongli?item.nongli.day:'')}}
+								</block>
+								</view>
 							</view>
 						</tm-col>
 					</tm-row>
@@ -326,13 +334,28 @@ export default {
 				}
 			},
 			isSelectedDateClass(date){
-				
+				let rangeL = 'round-l-24 round-tr-0 round-br-0'
+				let rangeR = 'round-r-24 round-tl-0 round-bl-0'
 				let index = this.selectedDateClass.findIndex((item)=>{
 					let val = date.year+'-'+date.month+'-'+date.day;
 					return val == item.date;
 				})
-				if(index >-1) return this.selectedDateClass[index].class;
-				return '';
+				let pc = '';
+				
+				if(date.start&&!date.end){
+					pc = ` ${rangeL} `;
+				}else if(date.end&&!date.start){
+					pc = ` ${rangeR} `;
+				}else if(date.start&&date.end){
+					pc = ` `
+				}
+				
+				if(index >-1){
+					
+					return this.selectedDateClass[index].class + pc
+				}
+				
+				return pc;
 			},
 			// 获取当前月份的数据。
 			getNowMonthData(){
@@ -639,6 +662,7 @@ export default {
 				
 				
 			},
+			
 			day_danxuanclick(e,index) {
 				// 是否禁用。
 				if(this.disabled||this.disabled=='true'){
@@ -656,7 +680,7 @@ export default {
 					this.selectedDay = p;
 					this.nowData.splice(index,1,p);
 				}else{
-
+			
 					let p = {...e};
 					if(!this.start&&!this.end){
 						this.clearRangeNowDay();
@@ -666,6 +690,8 @@ export default {
 						p.guocheng = false;
 						this.start = p
 						this.nowData.splice(index,1,p);
+						//发布选中开始的事件。
+						this.$emit("rang-start",{start:p,end:null})
 						return;
 					}
 					if(this.start&&this.end){
@@ -677,96 +703,123 @@ export default {
 						this.start = p
 						this.nowData.splice(index,1,p);
 						this.end=null;
+						//发布选中开始的事件。
+						this.$emit("rang-start",{start:p,end:null})
 						return;
 					}
 					if(this.start&&!this.end){
 						
-						if(new Date(e.year,e.month,e.day).getTime() <= new Date(this.start.year,this.start.month,this.start.day).getTime())
-						{
-							this.clearRangeNowDay();
-							this.$nextTick(function(){
+						this.$nextTick(function(){
+							let selected = new Date(e.year+"/"+e.month+"/"+e.day).getTime();
+							
+							let selectedStart = new Date(this.start.year+"/"+this.start.month+"/"+this.start.day).getTime()
+							if(selected <= selectedStart)
+							{
+								// this.clearRangeNowDay();
+								let enjh = uni.$tm.deepClone(this.start);
+								enjh.start = selected<selectedStart?false:true;
+								enjh.end = true;
+								enjh.guocheng = false;
+								this.end = enjh
+								let index_check =-1;
+								for(let ix =0 ; ix <this.nowData.length;ix++){
+									let item_check = this.nowData[ix]
+									if( item_check.month==enjh.month&&item_check.year==enjh.year&&item_check.day==enjh.day){
+										index_check=ix;
+										break;
+									}
+								}
+								if(index_check>-1){
+									this.nowData.splice(index_check,1,this.end);
+								}
 								p.start = true;
-								p.end = false;
+								p.end =  selected<selectedStart?false:true;
 								p.guocheng = false;
 								this.start = p
-								this.nowData.splice(index,1,p);
-							})
-							return;
-						}
-						if(new Date(e.year,e.month,e.day).getTime() > new Date(this.start.year,this.start.month,this.start.day).getTime())
-						{
-							
-							this.$nextTick(function(){
+								
+							}else if(selected > selectedStart)
+							{
 								p.start = false;
 								p.end = true;
 								p.guocheng = false;
 								this.end = p
-								this.nowData.splice(index,1,p);
-								// 计算包含的时间 区域。
-								let start_time = new Date(this.start.year+"/"+this.start.month+"/"+this.start.day).getTime()
-								let start_bdm = new Date(this.start.year+"/"+this.start.month).getTime()
-								let end_time = new Date(this.end.year+"/"+this.end.month+"/"+this.end.day).getTime()
-								let end_bdm = new Date(this.end.year+"/"+this.end.month).getTime()
-								this.fanwei=[];
-								let m=[];
-								
-								let testc = new this.$tm.calendar({value:this.start.year+"/"+this.start.month+"/"+this.start.day})
-								testc.setTimeArrayText(this.txt);
-								function findItemToindex_only(item,obj){
-									let istrue = false;
-									for(let i=0;i<obj.length;i++){
-										let idx = obj[i];
-										if(item.year==idx.year&&item.month==idx.month&&item.day==idx.day){
-											istrue = true;
-											break;
-										}
-									}
-									return istrue;
-								}
-								
-								
-								for(let j=0;j<1000;j++){
-									let pds  = new Date(testc.value.getFullYear()+"/"+(testc.value.getMonth()+1)).getTime();
-									let testod = testc.getData();
-									
-									if(pds<=end_bdm&&pds>=start_bdm){
-										
-										for(let k=0;k<testod.length;k++){
-											if(!findItemToindex_only(testod[k],m)){
-												m.push(testod[k]);
-											}
-										}
-										testc.nextMonth()
-										
-									}else{
+							
+							}
+							
+							this.nowData.splice(index,1,p);
+							
+							//发布选中开始的事件。
+							this.$emit("rang-start",{start:p,end:this.end})
+							//发布选中开始的事件。
+							this.$emit("rang-end",{start:this.start,end:this.end})
+							
+							// 计算包含的时间 区域。
+							let start_time = new Date(this.start.year+"/"+this.start.month+"/"+this.start.day).getTime()
+							let start_bdm = new Date(this.start.year,this.start.month-1).getTime()
+							let end_time = new Date(this.end.year+"/"+this.end.month+"/"+this.end.day).getTime()
+							let end_bdm = new Date(this.end.year,this.end.month-1).getTime()
+							this.fanwei=[];
+							let m=[];
+							
+							
+							let testc = new this.$tm.calendar({value:this.start.year+"-"+this.start.month+"-"+this.start.day})
+							
+							
+							testc.setTimeArrayText(this.txt);
+							function findItemToindex_only(item,obj){
+								let istrue = false;
+								for(let i=0;i<obj.length;i++){
+									let idx = obj[i];
+									if(item.year==idx.year&&item.month==idx.month&&item.day==idx.day){
+										istrue = true;
 										break;
 									}
 								}
+								return istrue;
+							}
+							
+							
+							for(let j=0;j<1000;j++){
+								let npsDate =  new Date(testc.value.getFullYear(),testc.value.getMonth());
+								let pds  = npsDate.getTime();
+								let testod = testc.getData();
 								
-								for(let i=0;i<m.length;i++){
-									let dod = {...m[i]};
-									let npds = new Date(dod.year+"/"+(dod.month)+"/"+dod.day);
-									let dq = npds.getTime()
-									if(dq > start_time && dq < end_time){
-										dod.start=false;
-										dod.end=false;
-										dod.checked=false;
-										dod.guocheng=true;
+								if(pds<=end_bdm&&pds>=start_bdm){
 									
-										let isindex =this.findItemToindex(dod);
-										if(isindex>-1){
-											this.nowData.splice(isindex,1,dod);
-											
+									for(let k=0;k<testod.length;k++){
+										if(!findItemToindex_only(testod[k],m)){
+											m.push(testod[k]);
 										}
-										this.fanwei.push(dod)
 									}
+									testc.nextMonth()
+									
+								}else{
+									break;
 								}
+							}
+							
+							for(let i=0;i<m.length;i++){
+								let dod = {...m[i]};
+								let npds = new Date(dod.year+"/"+(dod.month)+"/"+dod.day);
+								let dq = npds.getTime()
+								if(dq > start_time && dq < end_time){
+									dod.start=false;
+									dod.end=false;
+									dod.checked=false;
+									dod.guocheng=true;
 								
-								
-								
-							})
-							return;
-						}
+									let isindex =this.findItemToindex(dod);
+									if(isindex>-1){
+										this.nowData.splice(isindex,1,dod);
+										
+									}
+									this.fanwei.push(dod)
+								}
+							}
+							
+															
+						})
+						
 						
 						
 						
@@ -788,10 +841,10 @@ export default {
 		height: 80upx;
 		// text-align: center;
 		// line-height: 80upx;
-		line-height: 0;
+		line-height: inherit;
 		position: relative;
 		.text_bl{
-			position: absolute;
+			// position: absolute;
 			bottom: 14upx;
 		}
 	}

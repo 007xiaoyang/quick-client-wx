@@ -5,7 +5,7 @@
 		`shadow-${shadow}`
 	]"
 	>
-		<view class="tm-search-body flex-around">
+		<view @click="$emit('click')" class="tm-search-body flex-around">
 			<view v-if="showLeft" class="flex-shrink  pl-32 flex-center">
 				<slot name="left">
 					<tm-icons @click="$emit('cancel')" :black="black_tmeme" :color="color_tmeme" dense :name="leftIcon"></tm-icons>
@@ -67,6 +67,7 @@
 	 * @property {Function} cancel 点击左边图标产生的事件。
 	 * @property {Function} clear 点击清除图标时触发相关事件。
 	 * @property {Function} confirm 输入法键盘上点击确认，输入框后缀图标，右边部分点击时产生的事件，含当前输入的内容。
+	 * @property {Function} click 点击整体组件的事件。
 	 */
 
 	import tmIcons from "@/tm-vuetify/components/tm-icons/tm-icons.vue"

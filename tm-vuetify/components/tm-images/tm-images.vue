@@ -1,17 +1,22 @@
 <template>
-	<view @click="click" class="tm-images overflow " :class="[round=='rounded'?'rounded':`round-${round}`]">
-		
+	<view @click="click" class="tm-images overflow fulled " :class="[round=='rounded'?'rounded':`round-${round}`]">
 		<view class="fulled fulled-height tm-images-load flex-center">
 			<view class="d-inline-block load">
 				<text v-if="isLoad" class="iconfont icon-loading text-size-n text-grey"></text>
 			</view>
 			<view class="d-inline-block" v-if="isError">
-				<text  class="iconfont icon-exclamationcircle-f text-size-n text-grey"></text>
+				<slot name="error">
+					<text class="iconfont icon-exclamationcircle-f text-size-xl text-grey-lighten-2"></text>
+				</slot>
 			</view>
-			<image v-show="!isLoad"  @error="error"  :class="[round=='rounded'?'rounded':`round-${round}`]" :style="{
+			
+			<image v-show="!isLoad"  @error="error"  
+			:class="[round=='rounded'?'rounded':`round-${round}`]" 
+			:style="{
 				width:w+'px',
 				height:h+'px'
-			}" @load="loadPic" :src="src_path" :mode="model"></image>
+			}" 
+			@load="loadPic" :src="src_path" :mode="model"></image>
 			
 		</view>
 		
@@ -69,7 +74,8 @@
 				w: 0,
 				h: 0,
 				isLoad:false,
-				isError:false,
+				isError:false
+				
 			};
 		},
 		computed:{
@@ -82,6 +88,7 @@
 			src_path:function(){
 				if(
 				this.src.substring(0,4)=='http'||
+				this.src.substring(0,4)=='blob'||
 				this.src.substring(0,5)=='https'||
 				this.src.substring(0,3)=='ftp'||
 				this.src.indexOf('data:image')>-1
@@ -94,6 +101,7 @@
 		},
 		mounted() {
 			this.isLoad = true;
+			
 		},
 		methods: {
 			error(e) {
@@ -105,66 +113,57 @@
 				let wh = e.detail;
 				this.isLoad = false;
 				this.isError = false;
-				
 				this.$nextTick(async function(){
-					let tb = await this.$Querey(".tm-images",this,30).catch(ev => {})
-					let sw = tb[0].width||wh.width;
-					let sh = tb[0].height||wh.height;
-					let bl = wh.width / wh.height;
-					
-					if (this.w_px == 0 && this.h_px == 0) {
-						
-						this.w = sw;
-						this.h = sw / bl;
-						this.$emit('load', {
-							width: this.w,
-							height: this.h
-						})
-						
-						return;
-					}
-					
-					
-					if (this.w_px == 0 && this.h_px > 0) {
-						this.w = this.h_px * bl;
-						this.h = this.h_px
-						this.$emit('load', {
-							width: this.w,
-							height: this.h
-						})
-						
-						return;
-					}
-					if (this.w_px > 0 && this.h_px == 0) {
-						this.w = this.w_px;
-						this.h = this.w_px / bl
-						this.$emit('load', {
-							width: this.w,
-							height: this.h
-						})
-						
-						return;
-					}
-					if (this.w_px > 0 && this.h_px > 0) {
-						this.w = this.w_px;
-						this.h = this.h_px;
-						this.$emit('load', {
-							width: this.w,
-							height: this.h
-						})
-						
-						return;
-					}
-					
-					
+					this.$Querey(".tm-images",this,30).then(tb=>{
+						let sw = tb[0].width||wh.width;
+						let sh = tb[0].height||wh.height;
+						let bl = wh.width / wh.height;
+						if (this.w_px == 0 && this.h_px == 0) {
+							
+							this.w = sw;
+							this.h = sw / bl;
+							this.$emit('load', {
+								width: this.w,
+								height: this.h
+							})
+							return;
+						}
+						if (this.w_px == 0 && this.h_px > 0) {
+							this.w = this.h_px * bl;
+							this.h = this.h_px
+							this.$emit('load', {
+								width: this.w,
+								height: this.h
+							})
+							return;
+						}
+						if (this.w_px > 0 && this.h_px == 0) {
+							this.w = this.w_px;
+							this.h = this.w_px / bl
+							this.$emit('load', {
+								width: this.w,
+								height: this.h
+							})
+							return;
+						}
+						if (this.w_px > 0 && this.h_px > 0) {
+							this.w = this.w_px;
+							this.h = this.h_px;
+							this.$emit('load', {
+								width: this.w,
+								height: this.h
+							})
+							
+							return;
+						}
+					})
 					
 				})
 				
 			},
 			click(e) {
 				this.$emit("click", this.src_path);
-				if (this.previmage) {
-					
+				if (this.previmage&&!this.isError) {
 					uni.previewImage({
 						current: this.src_path,
 						urls: [this.src_path],

@@ -162,22 +162,23 @@
 				}
 				if (typeof this.list[0] === 'object') {
 					let index = 0;
+					let cindex = 1;
 					let pds = []
 					function tests(obj) {
-						
-						if(!obj) return;
-						index++
+						if(!obj||obj?.length==0){
+							return;
+						}
+						cindex = cindex+1;
+						index +=1;
 						pds.push({
 							itemIndex: 0,
 							childrenIndex: index,
 							wz: 0
 						})
 						if (obj && typeof obj === 'object' && Array.isArray(obj)) {
-							
 							if (obj[0][t.childrenKey]) {
 								tests(obj[0][t.childrenKey]);
 							}
-
 						}
 					}
 					pds.push({
@@ -186,12 +187,9 @@
 						wz: 0
 					})
 					tests(this.list[0][this.childrenKey])
-					
 					t.listIndex = pds;
-					
-					return index+1;
+					return cindex;
 				}
-				
 			},
 
 		},
@@ -271,7 +269,6 @@
 					let p = [];
 					function tests(obj) {
 						if(index > dNum) return;
-						
 						list.push([...obj])
 						if(obj[t.listIndex[index]?.itemIndex]){
 							let cl = obj[t.listIndex[index].itemIndex][t.childrenKey];

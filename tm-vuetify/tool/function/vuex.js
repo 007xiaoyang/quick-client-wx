@@ -48,7 +48,7 @@ class vuex {
 	}
 	actions(funName,arg){
 		try{
-			this.store.dispatch(funName,arg);
+			return this.store.dispatch(funName,arg);
 		}catch(e){
 			console.error("未发现函数方法:"+funName)
 		}

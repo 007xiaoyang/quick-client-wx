@@ -1,6 +1,6 @@
 <template>
-	<view class="tm-groupButton d-inline-block " :class="[`mx-${margin[0]}`,`my-${margin[1]}`]">
-		<view class="overflow " :class="[`round-${round}`]">
+	<view class="tm-groupButton  " :class="[`mx-${margin[0]}`,`my-${margin[1]}`]">
+		<view class="overflow fulled "  :class="[`round-${round}`]">
 			<slot></slot>
 		</view>
 	</view>
@@ -57,7 +57,15 @@
 				// #endif
 				ch.forEach((item, index) => {
 					if (item.$options.name === 'tm-button') {
-						item.customClass_puted=" ma-0 flat "
+						let str = '';
+						if(index==0){
+							str = ' round-l-'+t.round+' round-r-0'
+						}else if(index==ch.length-1){
+							str = ' round-r-'+t.round+' round-l-0'
+						}else{
+							str = ' round-l-0 round-r-0'
+						}
+						item.customClass_puted=" ma-0 "+str;
 						item.customDense_puted=true;
 						item.onclick=function(){
 							t.colorDefault();

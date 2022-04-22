@@ -2,7 +2,7 @@
  * 创建时间：2021年7月2日11:24:23
  * 作者：tmzdy
  */
-let ver = '1.2.296';
+let ver = '1.2.30';
 export default {
 	v: ver,
 	version: ver,

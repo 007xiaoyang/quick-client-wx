@@ -27,6 +27,8 @@ class uploadfile {
 			opts:{},
 			maxsize:10*1024*1024,
 			code:0,//定义成功的标志码
+			type:'image',//文件选择的类型
+			extension:['*'],//后缀过滤。
 			responseStu:{
 						code:'code',//服务器返回的码的字段名称
 						data:'data',//服务上传成功后返回 的数据字段名称
@@ -44,6 +46,8 @@ class uploadfile {
 			maxsize:arg.maxsize,
 			code:arg.code,
 			isAuto:arg.isAuto,//自动上传
+			type:arg.type,//文件选择的类型
+			extension:arg.extension,//后缀过滤。
 			responseStu:{...arg.responseStu,...(responseStu||{})}
 		}
 	}
@@ -56,15 +60,20 @@ class uploadfile {
 			
 			uni.chooseImage({
 				count:t.config.maxfile,
+				type:t.config.type,
+				extension:t.config.extension,
 				fail: (e) => {
-					uni.$tm.toast("用户取消选择图片");
-					rj();
+					console.error(e);
+					uni.$tm.toast("已取消选择");
+					rj(e);
 				},
 				success: (res) => {
+					console.log(res);
 					if(res.tempFilePaths.length==0){
-						uni.$tm.toast("未选择图片");
+						uni.$tm.toast("未选择");
 						return;
 					}
+					console.log(res);
 					let imgarray = res.tempFilePaths;
 					let fielist = res.tempFiles;
 					let jgsk = [];
@@ -90,10 +99,70 @@ class uploadfile {
 					rs(t.filelist)
 				}
 			})
+			
+		})
+	}
+	async chooseMPH5weixinFile(){
+		let t = this;
+		return new Promise((rs,rj)=>{
+			var fs = uni.chooseFile;
+			// #ifdef MP-WEIXIN || MP-QQ
+			fs = uni.chooseMessageFile;
+			// #endif
+			var config = {
+				count:t.config.maxfile,
+				type:t.config.type,
+				extension:t.config.extension,
+			}
+			if(!t.config.extension||!Array.isArray(t.config.extension)||t.config.extension?.length==0){
+				delete config.extension
+			}
+			fs({
+				...config,
+				fail: (e) => {
+					console.error(e);
+					uni.$tm.toast("已取消选择");
+					rj(e);
+				},
+				success: (res) => {
+					if(res.tempFiles.length==0){
+						uni.$tm.toast("未选择");
+						return;
+					}
+					let fielist = res.tempFiles;
+					let jgsk = [];
+					//0待上传，1上传中，2上传失败，3上传成功。4超过大小限制
+					fielist.forEach((item,index)=>{
+						let isMaxsize = fielist[index].size>t.config.maxsize?true:false;
+						let ftype = item.name||""
+						if(ftype){
+							ftype = ftype.substr(ftype.lastIndexOf(".")+1).toLocaleLowerCase();
+						}
+						jgsk.push({
+							url:item.path,
+							name:item.name||'默认文件名称',
+							type:ftype,
+							status:isMaxsize?'超过大小':"待上传",
+							progress:isMaxsize?100:0,
+							fileId:guid(),
+							statusCode:isMaxsize?4:0,
+							data:null,//上传成功后的回调数据。
+						})
+					})
+					t.filelist.push(...jgsk)
+					
+					t.selected(t.filelist);
+					if(t.config.isAuto){
+						t.start();
+					}
+					
+					rs(t.filelist)
+				}
+			})
+			
 		})
 	}
 	setConfig({maxfile,uploadUrl,opts,file_list,isAuto,responseStu}){
-		
 		let arg = arguments.length==0?{}:arguments[0];
 		this.config={...this.config,...arg}
 	}
@@ -148,7 +217,7 @@ class uploadfile {
 				name:t.config.opts?.name??'file',
 				header:t.config.opts?.header??{},
 				filePath:item.url,
-				
+				formData:{file_name:item.name},
 				success:(res)=>{
 					if(res.statusCode !=200){
 						item.statusCode = 2;
@@ -174,6 +243,10 @@ class uploadfile {
 					if(isJsonCallbackData){
 						try{
 							item.data = jsd[t.config.responseStu.data];
+							if(typeof item.data == 'object'){
+								item.data['name'] = item.name;
+								item.data['id'] = item['id']||"";
+							}
 							let itecode = jsd[t.config.responseStu.code]
 							if(itecode!==t.config.code){
 								isOk = false;
@@ -238,6 +311,7 @@ class uploadfile {
 	}
 	
 }
+
 /**
  * 上传文件。
  * 作者：tmzdy

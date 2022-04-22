@@ -1,3 +1,75 @@
+## 1.2.30 (2022-3-27)
+* tm-images增加出错插槽error，修改出错时提示的样式。
+* 修复tm-tree设置为单选模式后，第一级项目（非dir)单选失败。
+* tm-search新增点击整个组件发出的click事件。
+* tm-pickerView修复子级出现空数组时被计算为有效的三级。
+* 修复tm-listitem自定背景色失败，优化tm-sheet自定背景的逻辑。我不赞成使用这bgColor两个属性。
+* 修复tm-flotbutton在不同位置时，由于渲染的延迟，导致位置的闪现，影响美观。
+* [新增]tm-uploadfile文件上传组件，用于任意文件的上传和预览，仅支持小程序和h5。
+* tm-upload新增width属性，以便更好的控制组件宽度。
+* tm-slider和tm-sliders新增了width宽度属性。
+* 修复tm-monthCalendar在ios系统获取日期错误。
+* 修改tm-card插槽数据返回方式为对象。
+## 1.2.299 (2022-3-6)
+* tm-setpper调整后删除最小宽度
+* css库增加flex-[x]伸缩布局的盒子。
+* tm-upload新增model，图片缩放模式。
+* tm-images修复不支持临时文件路径的问题
+* tm-dropDownMenu修复重置的情况下对：单选列表，多选列表，级联，日期选择等失效的bug.
+* tm-swiper当有视频播放时，轮播将强制停止。等视频结束时如果启用了自动轮播，将继续轮播。
+* tm-listitem调整了默认的样式属性。
+* 修复了一些文档上的描述错误
+* tm-calendar修复一个样式上的判断错误。
+* tm-switch新增一些特性，允许修改组件的宽和高、以及关闭和开启的主题色。
+* tm-button新增在微信端授权失败的显示的属性，userProfileError，具体见文档。
+* 修复tm-pickersDateView未正常显示时间的中文后缀。
+* 修复tm-calendarView在范围选择状态下的bug
+* tm-icons图标修改了样式。
+* tm-checkbox和tm-radio修改了样式。
+* tm-countdown新增精确到毫秒
+* demo示例大量更新，及大量组件样式的优化
+* 主题库更新以支持上下渐变主题类，原有渐变如：bg-gradient-orange-accent，加了-b:bg-gradient-orange-accent-b即为上下渐变。
+* 主题工具更新以支持生成上下渐变的主题类[主题工具](https://jx2d.cn/themetool/#/)
+* 模板库正式上线[模板库](https://jx2d.cn/themetool/#/templete)
+## 1.2.298 (2022-2-25)
+* tm-grid调整了下划线的出现逻辑。
+* tm-button完整的添加了原生的属性，之前版本有些属性被精简了
+* tm-bottomnavigation 修复当使用自定16进制颜色背景时，底部安全距离的颜色未跟随tabar颜色。
+* tm-tabs修复在超过一屏时，第一个元素在左侧时，点击第一个底部条会有不同程序的偏移
+* tm-upload优化，当图片加载出错时，提示感叹号，以便感知当前加载状况。
+* tm-tree树状组件，新增了一个单选模式，默认为多选详见文档。
+* tm-album优化了组件在其它子组件内获取宽度失败的bug.
+* tm-weekbar修复日期带10进制和不带10进制时，选中失败的问题。
+* tm-steppe调整了步进器的禁用状态和宽高设置，以及一个兼容性的异步回调问题。
+* tm-input调整优化了样式
+* tm-radio和tm-checkbox调整优化了禁用下的样式状态
+* tm-button调整优化了样式
+* tm-groupButton调整了按钮组的样式
+* tm-card优化了卡片组件在暗黑模式的表现样式。
+* 其它更多组件的优化。
+## 1.2.297 (2022-2-12)
+* [新增]tm-card卡片组件。
+* 修复tm-propressRound当模式为半圆进度条时减少到0（含）以下时变成了全圆
+* tm-actionSheetMenu调整了默认圆角的样式，修复了某些问题。
+* tm-flotbutton修复了上两个版本引出的定位问题（居中）
+* tm-dialog优化了样式，默认不显示标题边线，间距调小，圆角默认改为8
+* tm-keyborad优化了默认字号样式，加大了字号。
+* 修复tm-bottomnavigation因测试red未删除，导致自定颜色主题被覆盖。
+* tm-images增加加载错误时的提醒占位符
+* 文档网站组件库进行了字母排序a-Z排序。
+* tm-menubars修改标题为超出一行自动省略
+* tm-stepper新增了相关属性功能：圆角分离按钮，小数位支持，整数支持，范围输入，长按增减，异步增减。
+* tm-swiper新增标题显示，视频轮播显示，详细请阅读文档。
+## 1.2.296 (2022-1-28)
+* 优化tm-flowLayout瀑布流组件的宽高计算的准确度。避免偶尔的计算错误，导致左右列不致。
+* tm-actionSheetMenu修复在弹出后如果在原生tabar模式下，h5中会被遮挡部分按钮的问题。
+* tm-echarts图表，新增一个ref函数resize如果外围改变了父元素宽度后，可调用 此函数进行重新绘制图表。
+* tm-upload新增：responseStu服务器响应数据的字段映射表，见文档说明
+* tm-treeSelete修复了一个错误
+* tm-dragGrid修复返回变化的列表数据，没有按照排序时的顺序返回。
+* 修复文档说明中的问题
+* css库增加一个flex-reverse，用于行内容的反转（对聊天对话作用较大）。
+* tm-input因hbx更新导致默认校验函数异常。现已修复。
 ## 1.2.295 (2022-1-20)
 * tm-stepper增加了change事件
 * tm-signBoard修复在h5下面保存失败的问题。

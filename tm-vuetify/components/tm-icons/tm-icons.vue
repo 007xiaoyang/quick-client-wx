@@ -1,9 +1,11 @@
 <template>
 	<!-- 图标 -->
-	<view @click="onclick" v-if="name" class="tm-icons d-inline-block ">
-		<view class="flex-center fulled fulled-height text-align-center" :style="{
+	<view @click="onclick" v-if="name" class="tm-icons  vertical-align-top" style="display: inline-block;font-size: 0;" >
+		<view class="flex-center " :style="{
 						width: sizes,
-						height: sizes
+						height: sizes,
+						lineHeight:sizes,
+						
 					}">
 			<block v-if="vtype == false">
 				<image :src="name" :style="{
@@ -12,19 +14,27 @@
 					}" mode="scaleToFill"></image>
 			</block>
 			<block v-if="vtype == true">
-				<!-- #ifdef APP-NVUE || APP-PLUS-NVUE -->
+				<!-- #ifdef APP-NVUE -->
 				<text :style="{
 						fontSize: sizes,
 						fontFamily:'iconfontTM'
 					}" class="icons "
 					:class="[ black_tmeme ? colors+'-bk':colors, dense ? '' : 'pa-10', black ? 'opacity-6' : '']">{{iconName}}</text>
 				<!-- #endif -->
-				<!-- #ifndef APP-NVUE && APP-PLUS-NVUE -->
+				
+				<!-- #ifdef MP -->
+				<text :style="{
+						fontSize: sizes,
+					}" class="icons mt--4"
+					:class="[prefx_computed, black_tmeme ? 'bk' : '', iconName, colorTheme ? colors : '', dense ? '' : 'pa-10', black ? 'opacity-6' : '']"></text>
+				<!-- #endif -->
+				<!-- #ifndef MP -->
 				<text :style="{
 						fontSize: sizes,
 					}" class="icons "
 					:class="[prefx_computed, black_tmeme ? 'bk' : '', iconName, colorTheme ? colors : '', dense ? '' : 'pa-10', black ? 'opacity-6' : '']"></text>
 				<!-- #endif -->
+				
 			</block>
 		</view>
 	</view>

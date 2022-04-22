@@ -1,22 +1,26 @@
 <!-- 开关。 -->
 <template>
 	<view @click="onclick" class="d-inline-block tm-switch " >
-		<view class="tm-switch-wk relative ">
+		<view class="tm-switch-wk relative " :style="[{width:width+'rpx',height:(height+4)+'rpx'}]">
 			<view class="tm-switch-bg  round-l-24 round-r-24 flex-between"
 			:class="[bgColorCusjs,loaddingState?'opacity-7':'']"
 			
 			>
-				<view  class="text-size-xs tm-switch-txt text-align-center flex-center" >
+				<view  class="text-size-xs tm-switch-txt text-align-center flex-center" style="width:50%">
 					<text>{{text[0]?text[0]:''}}</text>
 				</view>
-				<view   class="text-size-xs tm-switch-txt text-align-center text-grey flex-center">
-					<text>{{text[1]?text[1]:''}}</text>
+				<view   class="text-size-xs tm-switch-txt text-align-center  flex-center" style="width:50%">
+					<text class="pr-8">{{text[1]?text[1]:''}}</text>
 				</view>
 				
 				
 			</view>
 			<!-- bar -->
-			<view  class="tm-switch-wk-bar absolute rounded white  flex-center " 
+			<view  class="tm-switch-wk-bar absolute round-24 white  flex-center " 
+			:style="[
+				{transform:changValue?`translateX(${(width-(width/2+4))}rpx)`:`translateX(2rpx)`},
+				{width:(width/2-4)+'rpx',height:(height-4)+'rpx'}
+			]"
 			:class="[changValue?'shadow-'+color+'-10':'',changValue?'on aniOn':'aniOff']">
 				<text v-if="loaddingState" class="iconfont icon-loading" :class="[loaddingState?'load':'',`text-${color_tmeme}`]"></text>
 			</view>
@@ -35,6 +39,9 @@
 	 * @property {Boolean} black = [true|false] 默认：false, 暗黑模式
 	 * @property {Boolean} loadding = [true|false] 默认：false, 是否加载中
 	 * @property {Array} text = [true|false] 默认： ['开','关'], 左右两边的字符
+	 * @property {Number} width = [] 默认：100,单位rpx，宽度
+	 * @property {Number} height = [] 默认：50,单位rpx，高度
+	 * @property {String} offBgcolor = [] 默认：'grey-lighten-2 text-grey', 主题色可以是文字色组合来改变文字和背景色.
 	 * @example <tm-switch v-model="checked"></tm-switch>
 	 * 
 	 */
@@ -77,6 +84,18 @@
 				default:()=>{
 					return ['开','关']
 				}
+			},
+			width:{
+				type:String|Number,
+				default:100
+			},
+			height:{
+				type:String|Number,
+				default:50
+			},
+			offBgcolor:{
+				type:String,
+				default:'grey-lighten-2 text-grey'
 			},
 			// 跟随主题色的改变而改变。
 			fllowTheme:{
@@ -125,7 +144,7 @@
 					if(this.black_tmeme){
 						return 'grey-darken-4   bk';
 					}else{
-						return 'grey-lighten-1 grey';
+						return this.color_tmeme+' opacity-5';
 					}
 				}
 				
@@ -135,7 +154,7 @@
 					
 				}else{
 					if(this.changValue) return this.color_tmeme + ' text-white ';
-					if(!this.changValue) return 'grey-lighten-2 text-white ';
+					if(!this.changValue) return this.offBgcolor;
 				}
 
 				
@@ -185,8 +204,8 @@
 .tm-switch{
 	vertical-align: middle;
 	.tm-switch-wk{
-		width: 100rpx;
-		height: 48rpx;
+		// width: 100rpx;
+		// height: 52rpx;
 	}
 	.tm-switch-bg{
 		width: 100%;
@@ -194,16 +213,16 @@
 		transition: all 0.5s;
 		
 		.tm-switch-txt{
-			width: 50upx;
+			// width: 50upx;
 			height: 100%;
 			// line-height: 48upx;
 		}
 	}
 	.tm-switch-wk-bar{
 		left: 4rpx;
-		top: 5rpx;
-		width:40rpx;
-		height: 40rpx;
+		top: 4rpx;
+		// width:40rpx;
+		// height: 46rpx;
 		transition: all 0.35s ease-in-out;
 		.load{
 			animation: xhRote 0.8s infinite linear;
@@ -212,11 +231,10 @@
 }
 .aniOn{
 	left: inherit;
-	transform: translateX(52rpx);
+	
 }
 .aniOff{
 	right: inherit;
-	transform: translateX(0rpx);
 }
 
 

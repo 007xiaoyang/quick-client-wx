@@ -3,38 +3,38 @@
 		<view :class="['pa-24']">
 			<view :class="[img?'flex-start':'']">
 				<view v-if="img" class="flex-shrink mr-24">
-					<slot name="img" :text="img">
+					<slot name="img" :text="{data:img}">
 						<tm-images :round="imgRound" :width="90" :src="img"></tm-images>
 					</slot>
 				</view>
 				<view class="fulled">
 					<view class="subtitle_wk flex-between ">
 						<view v-if="subTitle" class="subtitle text-size-s text-grey">
-							<slot name="subTitle" :text="subTitle">{{ subTitle }}</slot>
+							<slot name="subTitle" :text="{data:subTitle}">{{ subTitle }}</slot>
 						</view>
 						<view class="px-12"></view>
 						<view v-if="statusText" class="substatus flex-shrink text px-12 py-6 text-size-xs round-6 text-weight-b" :class="[black_tmeme ? 'bk' : '', statusColor]">
-							<slot name="statusText" :text="statusText">{{ statusText }}</slot>
+							<slot name="statusText" :text="{data:statusText}">{{ statusText }}</slot>
 						</view>
 					</view>
 					<view v-if="title" :class="[`text-size-${titleSize}`]" class=" my-16 text-weight-b text-overflow-2">
-						<slot name="title" :text="title">{{ title }}</slot>
+						<slot name="title" :text="{data:title}">{{ title }}</slot>
 					</view>
 					<view v-if="subText" class="text-size-s text-grey text-overflow-2">
-						<slot name="subText" :text="subText">{{ subText }}</slot>
+						<slot name="subText" :text="{data:subText}">{{ subText }}</slot>
 					</view>
 				</view>
 			</view>
 			<view class=" py-24 flex-center" v-if="titleBorder">
-				<view class="border-t-1 fulled"></view>
+				<view class="border-t-1 fulled" :class="[black_tmeme?'bk':'']"></view>
 			</view>
 			<view class="text-size-n " :class="[black_tmeme ? 'bk' : '']">
-				<slot name="content" :text="content">
+				<slot name="content" :text="{data:content}">
 					<view selectable >{{ content }}</view>
 				</slot>
 			</view>
 			<view class=" py-24 flex-center" v-if="actionBorder">
-				<view class="border-t-1 fulled"></view>
+				<view class="border-t-1 fulled" :class="[black_tmeme?'bk':'']"></view>
 			</view>
 			<view class="flex-end" :class="[black_tmeme ? 'bk' : '']" v-if="btnColorToarrays.length > 0">
 				<slot name="action" :action="{ btn: action, color: btnColorToarrays }">

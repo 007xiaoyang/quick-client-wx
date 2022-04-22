@@ -83,7 +83,7 @@
 					if(typeof p==='string'){
 						p = p.replace(/-/g,'/')
 					}
-					this.d_time = p
+					this.d_time = new Date(p).toLocaleDateString()
 				}
 			}
 		},
@@ -116,7 +116,8 @@
 			if(typeof p==='string'){
 				p = p.replace(/-/g,'/')
 			}
-			this.nowDate =  p||dte;
+			
+			this.nowDate =  new Date(p||dte).toLocaleDateString();
 			this.getTimeList(this.d_time)
 		},
 		methods: {

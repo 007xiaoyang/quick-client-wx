@@ -42,7 +42,7 @@
 							`border-${black_tmeme?(borderColor?'grey-darken-4':''):borderColor}-a-1`,
 							
 							]">
-							<view class="flex-shrink pr-12 flex-center" v-if="prefixpIcon" style="line-height: 0;">
+							<view class="flex-shrink px-16 flex-center" v-if="prefixpIcon" style="line-height: 0;">
 								<tm-icons dense  :name="prefixpIcon" :size="28" :color="(prefixpIconColor||color_tmeme)" ></tm-icons>
 							</view>
 							<view :style="{fontSize:font_size}" class="flex-shrink pr-24" :class="[titleClass,black_tmeme?'bk  text-grey-lighten-3':'']" v-if="prefixpText">
@@ -56,7 +56,7 @@
 								:auto-focus="autoFocus" :confirm-type="confirmType" :disabled="disabled" 
 								:password="password"  :type="inputType" :value="value" class="tm-input-center-input "
 								:class="['text-align-'+align,showError?'text-red':'',' py-5 ']" :placeholder="placeholder"
-								:placeholder-class="black_tmeme? 'text-grey-darken-1 ':' text-grey-lighten-1 ' +` text-size-n `+ placeholderClass"
+								:placeholder-class="black_tmeme? 'text-grey-darken-1 ':'  ' +` text-size-n ` + placeholderClass"
 								 :style="{
 									fontSize:font_size,
 								 	height:height_rpx+'rpx'
@@ -75,7 +75,7 @@
 									height:height_rpx+'rpx',
 									fontSize:font_size,
 								}"
-								:class="[maxlength>0?'pb-46':'','text-align-'+align,showError?'text-red':'','pt-10 fulled']" :placeholder="placeholder"
+								:class="[maxlength>0?'pb-46':'','text-align-'+align,showError?'text-red':'','pt-16 fulled']" :placeholder="placeholder"
 								:placeholder-class="black_tmeme? 'text-grey-darken-1 ':' text-grey-lighten-1 ' +` text-size-n `+ placeholderClass" >	
 							</textarea>
 							<!-- 清除图标 -->
@@ -150,6 +150,7 @@
 	 * @property {String} placeholder = [] 默认： 请输入, 占位文字
 	 * @property {Boolean} vertical = [false|true] 默认： false, 是否上下排列
 	 * @property {Number} round = [] 默认： 2, 输入框圆角。
+	 * @property {Boolean} showIndent = [] 默认： true, 是否输入框内部两边缩进
 	 * @property {Number} bg-round = [] 默认： 0, 整体框圆角。
 	 * @property {Number} bg-shadow = [] 默认： 0, 整体框投影。
 	 * @property {String} bg-theme = [] 默认：white, 整体框背景
@@ -319,7 +320,10 @@
 				type: String,
 				default: "请输入"
 			},
-			placeholderClass: String,
+			placeholderClass:{
+				type:String,
+				default:'text-grey-lighten-1'
+			},
 			// 是否上下排列输入框。
 			vertical: Boolean,
 			round:{

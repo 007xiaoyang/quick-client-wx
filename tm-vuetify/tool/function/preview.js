@@ -50,6 +50,4 @@ function previewImg(url,list,rangKey){
 	
 }
 
-export default  {
-	previewImg
-} ;
+export default  previewImg

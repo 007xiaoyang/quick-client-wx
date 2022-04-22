@@ -1,46 +1,60 @@
 <template>
-	<view class="tm-upload flex-start " id="tm-upload">
-		<view v-for="(item,index) in list" :key="index" class="tm-upload-item  " :class="[grid!=1?'ma-4':'']" :style="{
-			width:itemWidth+'px',
-			height:itemHeight+'px'
-		}">
-			<view v-if="!disabled" class="tm-upload-del " :class="[delDirection]">
-				<slot name="del">
-					<tm-icons @click="del(index)" :black="black_tmeme" name="icon-times-circle-fill" size="36" color="red"></tm-icons>
-				</slot>
+	<view class="tm-upload  ">
+		<tm-dialog v-model="showalert" title="视频预览" :showCancel="false" confirmText="关闭预览" confirmColor="primary text">
+			<view>
+				<video :src="vedioUrl" style="width: 500rpx;height: 300rpx;" objectFit="contain"></video>
 			</view>
-			<view @click.stop="$tm.preview(item.url,list,'url')" class="tm-upload-item-ck text flex-center  overflow" 
-			:class="[color_tmeme,black_tmeme?'grey-darken-4 bk':'',`round-${round}`]">
-				<slot name="img" :info={itemWidth,itemHeight}>
-					<tm-icons style="line-height: 0;" name="icon-exclamationcircle-f" v-if="item['loaderror']==true"></tm-icons>
-					<image :mode="model" v-else :src="item.url" @error="errorFile(item,index)" :style="{
-						width:itemWidth+'px',
-						height:itemHeight+'px'
-					}"></image>
-				</slot>
+		</tm-dialog>
+		<view class="flex-col">
+			<view v-for="(item,index) in list" :key="index" class="text  border-b-2"  :class="[color_tmeme,black_tmeme?'grey-darken-4 bk ':'',]">
+				<view class="flex-between px-24">
+					<view 
+					class="flex-6 py-18 flex-start  text-overflow text-size-m " 
+					>
+						<view class="d-inline-block pr-12">
+							<tm-icons v-if="item.statusCode==3" :black="black_tmeme" name="icon-check" size="28" color="green"></tm-icons>
+							<tm-icons v-if="item.statusCode==0" :black="black_tmeme" name="icon-arrow-alt-from-botto" size="28" color="primary"></tm-icons>
+							<tm-icons v-if="item.statusCode==2" :black="black_tmeme" name="icon-times-circle" size="28" color="red"></tm-icons>
+							<tm-icons v-if="item.statusCode==4" :black="black_tmeme" name="icon-exclamation-circle" size="28" color="red"></tm-icons>
+							<tm-icons v-if="item.statusCode==1" :black="black_tmeme" name="icon-loading" size="28" color="primary"></tm-icons>
+						</view>
+						<slot name="file" :info="{item}">
+							{{item['name']||item['file_name']||item['filename']||item.path}}
+						</slot>
+					</view>
+					<view v-if="!disabled" class="flex-end flex-6" >
+						<slot name="right" :info="{data:item,index:index}">
+							<view class="d-inline-block pr-24">
+									<tm-icons @click="opendoc(item)" :black="black_tmeme" name="icon-eye-fill" size="36" :color="color"></tm-icons>
+							</view>
+							<view class="d-inline-block pl-12">
+									<tm-icons @click="del(index)" :black="black_tmeme" name="icon-times" size="32" color="red"></tm-icons>
+							</view>
+						</slot>
+						
+					</view>
+				</view>
+				<!-- 上传提示语。 -->
+				<view v-if="tips&&!disabled" class=" text-size-xs round-b-2 px-24 py-8"
+				 :class="[
+					 item.statusCode==2||item.statusCode==4?'red text':'',
+					 item.statusCode==1||item.statusCode==0?'black text':'',
+					 item.statusCode==3?color_tmeme+' text':'',
+					 black_tmeme?'bk':''
+				 ]"
+				 >{{item.status}}</view>
+				<!-- 上传的进度。 -->
+				<view v-if="item.progress>0&&item.progress!=100&&!disabled" class="tm-upload-pro green"
+					:style="{width:item.progress+'%'}"></view>
 			</view>
-			<!-- 上传提示语。 -->
-			<view v-if="tips&&!disabled" class="tm-upload-tips text-size-xs round-b-2"
-			 :class="[
-				 item.statusCode==2||item.statusCode==4?'red text':'',
-				 item.statusCode==1||item.statusCode==0?'black text':'',
-				 item.statusCode==3?color_tmeme+' text':'',
-				 black_tmeme?'bk':''
-			 ]"
-			 >{{item.status}}</view>
-			<!-- 上传的进度。 -->
-			<view v-if="item.progress>0&&item.progress!=100&&!disabled" class="tm-upload-pro green"
-				:style="{width:item.progress+'%'}"></view>
-		</view>
-
-		<view  @click="addfile" v-if="list.length<max&&!disabled&&showSheet" class="tm-upload-item  ma-4 grey-lighten-4 " :class="[`round-${round}`]" :style="{
-			width:itemWidth+'px',
-			height:itemHeight+'px'
-		}">
-			<view class="tm-upload-item-ck border-a-0 flex-center  text " :class="[color_tmeme,black_tmeme?'grey-darken-4 bk':'',`round-${round}`]">
-				<slot name="upload">
-					<tm-icons name="icon-plus" size="36" :color="color_tmeme"></tm-icons>
-				</slot>
+			
+			<view  @click="addfile" v-if="list.length<max&&!disabled" class=" grey-lighten-4 ">
+				<view class="tm-upload-item-ck border-a-0 flex-center  text py-50" :class="[color_tmeme,black_tmeme?'grey-darken-4 bk':'']">
+					<slot name="upload">
+						<tm-icons name="icon-plus" size="36" :color="color_tmeme"></tm-icons>
+						<text class="text-size-n pl-12">添加文件</text>
+					</slot>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -51,51 +65,34 @@
 	 * 上传图片组件
 	 * @property {Function} change 每一张图片上传成功都传动触发，并返回上传成功的图片列表。
 	 * @property {Function} del 删除一张图片时触发，返回当前删除的图片数据。
-	 * @property {Number|String} grid = [1|2|3|4|5] 默认：5，一行排几个。
 	 * @property {Number} code = [] 默认：0，服务器上传返回数据中表示成功的标志码。
-	 * @property {Number} width = [] 默认：0，自定义组件宽度。如果0，自动获取。
-	 * @property {Number|String} img-height = [0] 默认：0，宽高相等。单位upx,自定义图片高度。
 	 * @property {Number|String} max = [9] 默认：9，最大上传数量
-	 * @property {String} del-direction = [left|right|center] 默认：right， 删除按钮的方向。left,right,center
+	 * @property {String} fileType = [all|image|file|vedio] 默认：all，上传的文件类型
+	 * @property {Array} extension = [*] 默认：[]，上传的文件后缀过滤比如:[".jpg",".doc"]
 	 * @property {String|Boolean} disabled = [true|false] 默认：false， 如果禁用，会隐藏上传和删除按钮,只显示已上传的图片。
 	 * @property {String} url = [] 默认：""，上传的地址。
 	 * @property {Array} filelist = [] 默认：[]，默认上传显示的图片。如果加上filelist.sync的话，会自动更新数据实现双向绑定。类似于v-model;
 	 * @property {String} url-key = [] 默认：""，返回数据时，如果返回的是对象。则需要提供对象图像地址的key。默认没有，返回的即是图片地址。
 	 * @property {Object} header = [] 默认：{}，上传的头部参数。
 	 * @property {String} file-name = [file] 默认：file，上传时的文件key名。
-	 * @property {String} model = [scaleToFill|aspectFit|aspectFill|widthFix|heightFix|top|bottom|center|left|right|top left|top right|bottom left|bottom right] 默认：scaleToFill,图片展现模式，同官方。
 	 * @property {String} name = [] 默认：''，提交表单时的的字段名称标识
 	 * @property {Boolean|String} tips = [true|false] 默认：true，是否显示底部的上传提示语。上传中，失败等。
 	 * @property {Boolean|String} black = [true|false] 默认：null，暗黑模式。
 	 * @property {Boolean|String} auto-upload = [true|false] 默认：false，是否自动上传，即添加完图片后立即上传。
-	 * @property {Number|String} round = [] 默认：3，圆角
 	 * @property {Object} responseStu = [] 默认： {code:'code',//服务器返回的码的字段名称data:'data',//服务上传成功后返回 的数据字段名称msg:'msg'//服务器响应信息的字段名称。}，服务器响应结构字段映射表
 	 * @property {Number|String} maxsize = [] 默认：10*1024*1024，最大上传的图片大小，10mb大小
-	 * @example <tm-upload></tm-upload>
+	 * @example <tm-uploadfile></tm-uploadfile>
 	 * @description 可以通过refs.组件获得：addfile主动触发添加文件，stopupload停止上传，startupload开始或者继续上传，del删除一张图片。
 	 */
 	import tmIcons from "@/tm-vuetify/components/tm-icons/tm-icons.vue"
+	import tmDialog from "@/tm-vuetify/components/tm-dialog/tm-dialog.vue"
 	export default {
-		components:{tmIcons},
-		name: "tm-upload",
+		components:{tmIcons,tmDialog},
+		name: "tm-uploadfile",
 		props: {
-			model:{
-				type:String,
-				default:'scaleToFill'
-			},
 			black:{
 				type:Boolean|String,
 				default:null
-			},
-			// 一行几个。
-			grid: {
-				type: String | Number,
-				default: 5
-			},
-			// 默认0即为宽高相等。单位upx
-			imgHeight: {
-				type: String | Number,
-				default: 0
 			},
 			// 最大上传数量，默认9
 			max: {
@@ -113,11 +110,6 @@
 				default: 'primary'
 			},
 			
-			// 删除按钮的方向。left,right,center
-			delDirection: {
-				type: String,
-				default: 'right'
-			},
 			// 如果禁用，会隐藏上传和删除按钮。
 			disabled: String | Boolean,
 			// 上传的地址。
@@ -145,6 +137,14 @@
 					return {};
 				}
 			},
+			fileType:{
+				type:String,//上传的文件类型，默认所有。
+				default:'all'
+			},
+			extension:{
+				type:Array,//上传的文件类型，默认所有。
+				default:()=>[]
+			},
 			// 上传时的文件key名。默认file
 			fileName:{
 				type:String,
@@ -165,10 +165,6 @@
 				type:String,
 				default:''
 			},
-			round:{
-				type:Number|String,
-				default:3
-			},
 			// 跟随主题色的改变而改变。
 			fllowTheme:{
 				type:Boolean|String,
@@ -176,10 +172,6 @@
 			},
 			//定义上传成功返回的code码，默认是0表示上传成功 。
 			code:{
-				type:Number,
-				default:0
-			},
-			width:{
 				type:Number,
 				default:0
 			},
@@ -212,63 +204,112 @@
 		},
 		data() {
 			return {
-				maxWidth: 0,
-				itemWidth: 0,
-				itemHeight: 0,
+				showalert:false,
 				list: [],
-				//兼容app使用.
-				showSheet:true,
+				vedioUrl:'',
 				upObje:null,
 			};
 		},
 		created() {
-			// #ifdef APP-VUE || APP-PLUS  || MP
-			this.showSheet = false;
-			// #endif
+			
 		},
 		async mounted() {
 			let t = this;
-			
-			this.$nextTick(async function(){
-				
-				this.$Querey('.tm-upload', this,30).then(o=>{
-						// #ifdef APP-VUE || APP-PLUS  || MP
-						t.showSheet = true;
-						// #endif
-						t.maxWidth = o[0].width||t.width;
-						let itemWidth = (t.maxWidth - (parseInt(t.grid) - 1) * uni.upx2px(12)) / parseInt(t.grid);
-						t.itemWidth = itemWidth;
-						t.itemHeight = t.itemWidth;
-						if (t.imgHeight > 0) {
-							t.itemHeight = parseInt(uni.upx2px(t.imgHeight));
-						}
-						
-						if (typeof t.filelist === 'object' && Array.isArray(t.filelist)) {
-							let plist = [...t.filelist];
-							plist.forEach((item, index) => {
-								let url = "";
-								if (typeof item === 'string') {
-									url = item;
-								} else if (typeof item === 'object') {
-									url = item[t.urlKey]
-								}
-								t.list.push({
-									url: url,
-									status: "上传成功",
-									progress: 100,
-									fileId: t.$tm.guid(),
-									statusCode: 3,
-									data: item,
-								})
-							})
-						
-						}
+			if (typeof t.filelist === 'object' && Array.isArray(t.filelist)) {
+				let plist = [...t.filelist];
+				plist.forEach((item, index) => {
+					let url = "";
+					if (typeof item === 'string') {
+						url = item;
+					} else if (typeof item === 'object') {
+						url = item[t.urlKey]
+					}
+					t.list.push({
+						url: url,
+						status: "上传成功",
+						progress: 100,
+						fileId: t.$tm.guid(),
+						statusCode: 3,
+						data: item,
 					})
 				})
-				
-
+			
+			}
 		},
 		methods: {
+			opendoc(item){
+				this.url="";
+				let type = item.type;
+				let image = ['jpg','png','jpeg','gif'];
+				let video = ['mp4','avi','mov','webm','ogg','flv','m3u8'];
+				let doc = ['doc', 'xls', 'ppt', 'pdf', 'docx', 'xlsx', 'pptx','text','txt'];
+				let isSou = [...image,...video,...doc].filter(el=>el==item.type);
+				if(isSou.length==0){
+					uni.showToast({
+						title:"未知文件格式，不支持预览",icon:'none'
+					})
+					return;
+				}
+				let imageOpen = image.filter(el=>el==item.type);
+				if(imageOpen.length>0){
+					this.$tm.preview.previewImg(item.url,[item.url],'url')
+					return;
+				}
+				let videoOpen = video.filter(el=>el==item.type);
+				if(videoOpen.length>0){
+					this.url = item.url;
+					this.showalert = true;
+					return;
+				}
+				let docOpen = doc.filter(el=>el==item.type);
+				// #ifdef H5
+				uni.showToast({
+					title:"不支持预览稿件",icon:'none'
+				})
+				return;
+				// #endif
+				if(docOpen.length>0){
+					if(item.url.indexOf('http://tmp/')>-1){
+						uni.openDocument({
+							filePath:item.url
+						})
+					}else{
+						uni.showLoading({
+							title:'下载中',
+							mask:true
+						})
+						uni.downloadFile({
+							url: item.url, 
+							success: (res) => {
+								if (res.statusCode !== 200) {
+									uni.hideLoading()
+									uni.showToast({
+										title:"下载失败",
+										icon:'error'
+									})
+									return;
+								}
+								uni.hideLoading()
+								let url = res.tempFilePath;
+								uni.openDocument({
+									filePath:url
+								})
+							},
+							fail:()=>{
+								uni.hideLoading()
+								uni.showToast({
+									title:"下载失败",
+									icon:'error'
+								})
+							}
+						});
+					}
+					
+					
+					return;
+				}
+				
+			},
 			errorFile(item,index){
 				let id = item;
 				id['loaderror'] = true;
@@ -279,14 +320,22 @@
 				let t= this;
 				let plist = list||[];
 				plist.forEach((item, index) => {
+					let name = "";
+					let type = "";
 					let url = "";
 					if (typeof item === 'string') {
 						url = item;
+						name = item;
+						type = item.substr(item.lastIndexOf(".")+1);
 					} else if (typeof item === 'object') {
-						url = item[t.urlKey]
+						url = item[t.urlKey];
+						name = item['name']||url;
+						type = name.substr(name.lastIndexOf(".")+1);
 					}
 					t.list.push({
 						url: url,
+						type:type,
+						name:name,
 						status: "上传成功",
 						progress: 100,
 						fileId: t.$tm.guid(),
@@ -312,7 +361,9 @@
 						isAuto:this.autoUpload,
 						maxsize:this.maxsize,
 						code:this.code,
-						responseStu:this.responseStu
+						responseStu:this.responseStu,
+						type:this.fileType,
+						extension:this.extension
 					});
 					// 添加已有的图片。
 					this.upObje.addfile(this.list);
@@ -320,10 +371,15 @@
 						t.changeSuccess();
 					}
 				}else{
-					this.upObje.setConfig({maxsize:this.maxsize,maxfile:maxfile,code:this.code,responseStu:this.responseStu,opts:{header:this.header_obj,name:this.fileName}});
+					this.upObje.setConfig({
+						type:this.fileType,
+						extension:this.extension,
+						maxsize:this.maxsize,maxfile:maxfile,code:this.code,responseStu:this.responseStu,opts:{header:this.header_obj,name:this.fileName}});
 				}
 				
-				let clist = await this.upObje.chooesefile().catch(e=>{});
+				let clist = await this.upObje.chooseMPH5weixinFile().catch(e=>{
+					console.error(e);
+				});
 				if(clist){
 					t.list = clist;
 				}
@@ -345,7 +401,6 @@
 			},
 			// 删除一张图片。
 			del(index) {
-				if(this.disabled) return;
 				this.$emit("del",this.list[index])
 				this.list.splice(index, 1);
 				this.changeSuccess();
@@ -373,7 +428,6 @@
 			},
 			//清除所有已上传的文件。
 			clearAllFile(){
-				if(this.disabled) return;
 				this.$emit("clear",[])
 				this.list=[];
 				this.changeSuccess();
@@ -383,62 +437,5 @@
 </script>
 
 <style lang="scss" scoped>
-	.tm-upload {
-		flex-flow: wrap;
-
-		.tm-upload-item {
-			position: relative;
-
-			.tm-upload-tips {
-				position: absolute;
-				z-index: 10;
-				left: 0;
-				bottom: 0;
-				height: 40upx;
-				line-height: 40upx;
-				text-align: center;
-				font-size: 23upx;
-				width: 100%;
-			}
-
-			.tm-upload-pro {
-				position: absolute;
-				z-index: 11;
-				left: 0;
-				bottom: 0;
-				height: 6upx;
-				width: 0%;
-			}
-
-			.tm-upload-del {
-				position: absolute;
-				z-index: 10;
-
-				&.right {
-					right: -6upx;
-					top: -8upx;
-				}
-
-				&.left {
-					left: -6upx;
-					top: -8upx;
-				}
-
-				&.center {
-					width: 100%;
-					height: 100%;
-					left: 0;
-					top: 0;
-					display: flex;
-					justify-content: center;
-					align-items: center;
-				}
-			}
-
-			.tm-upload-item-ck {
-				width: 100%;
-				height: 100%;
-			}
-		}
-	}
+	
 </style>

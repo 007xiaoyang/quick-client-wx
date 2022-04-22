@@ -187,7 +187,15 @@ export default {
 			return this.$tm.vx.state().tmVuetify.black;
 		},
 		modhz: function() {
-			return { ...this.hoz, ...this.modeValue };
+			let hz = [];
+			let moz = { ...this.hoz, ...this.modeValue };
+			hz.push(moz.year)
+			hz.push(moz.month)
+			hz.push(moz.day)
+			hz.push(moz.hour)
+			hz.push(moz.min)
+			hz.push(moz.sec)
+			return hz;
 		},
 		detavlue:function () {
 			let d = this.defaultValue;
