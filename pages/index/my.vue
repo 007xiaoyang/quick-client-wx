@@ -1,9 +1,10 @@
 <template>
 	<view class="">
-		<tm-sheet color="pink" round="b-20" :margin="0" :padding="[32, 10]" shadow="0">
-			<tm-listitem class="mb-10" color="pink" :margin="[0,32]"  title="用户信息" label="详情"	 title-color="#fff" :show-left-icon="true" shadow="0" >
+		<tm-sheet :color="$tm.vx.state().user.themeColor" round="b-20" :margin="0" :padding="[32, 10]" shadow="0">
+			<tm-listitem class="mb-10" :color="$tm.vx.state().user.themeColor" :margin="[0,32]" title="用户信息" label="详情"
+				title-color="#fff" :show-left-icon="true" shadow="0">
 				<template v-slot:left>
-					<tm-avatar src="https://picsum.photos/200" :size="120" ></tm-avatar>
+					<tm-avatar src="https://picsum.photos/200" :size="120"></tm-avatar>
 				</template>
 				<template v-slot:label>
 					<view class="text-white">详情</view>
@@ -36,7 +37,7 @@
 					{icon:'icon-weibo',text:'待发货',iconSize:40,color:'blue',dot:true,dotIcon:'icon-check'},
 					{icon:'icon-pengyouquan',text:'待收货',color:'green',fontColor:'green',dot:true,dotIcon:'icon-clock'},
 					{icon:'icon-aliwangwang',text:'售后/退款',color:'blue-grey',dot:true,dotIcon:'icon-redo'},
-				]" ></tm-grid>
+				]"></tm-grid>
 		</tm-sheet>
 		<tm-sheet padding="0">
 			<view class="text-size-n text-weight-b mb-24 border-b-1 pa-20">我的服务</view>
@@ -47,7 +48,7 @@
 					{icon:'icon-aliwangwang',text:'优惠券',color:'blue-grey',dot:true,dotIcon:'icon-redo'},
 					{icon:'icon-aliwangwang',text:'积分商城',color:'blue-grey',dot:true,dotIcon:'icon-redo'},
 					{icon:'icon-aliwangwang',text:'积分明细',color:'blue-grey',dot:true,dotIcon:'icon-redo'},
-				]" ></tm-grid>
+				]"></tm-grid>
 		</tm-sheet>
 	</view>
 </template>
@@ -56,7 +57,7 @@
 	export default {
 		data() {
 			return {
-				
+
 			}
 		},
 		methods: {

@@ -2,7 +2,8 @@
 	<view>
 		<view v-if="show_dev" @click.stop.prevent="maskClick" :class="[mask?'mask':'']"
 			class="tm-message fixed t-0 l-0 fulled fulled-height flex-center">
-			<view :class="[black_dev?'black bk':'',clickOverlay?'clickOverlay':'']" class="tm-message-body  round-6 pa-24 flex-center shadow-24 ">
+			<view :class="[black_dev?'black bk':'',clickOverlay?'clickOverlay':'']"
+				class="tm-message-body  round-6 pa-24 flex-center shadow-24 ">
 				<view class=" flex-center flex-col">
 					<view :class="[
 						model,
@@ -97,10 +98,16 @@
 			color_tmeme: function() {
 				if (this.$tm.vx.state().tmVuetify.color !== null && this.$tm.vx.state().tmVuetify.color && this
 					.fllowTheme) {
-						let cos = this.$tm.vx.state().tmVuetify.color;
-						let co={...this.color,info:cos,quest:cos,load:cos,wait:cos};
-						
-						
+					let cos = this.$tm.vx.state().tmVuetify.color;
+					let co = {
+						...this.color,
+						info: cos,
+						quest: cos,
+						load: cos,
+						wait: cos
+					};
+
+
 					return co;
 				}
 				return this.color;
@@ -115,15 +122,15 @@
 				show_dev: false,
 				mask: false,
 				black_dev: false,
-				clickOverlay:false,
+				clickOverlay: false,
 			};
 		},
-		destroyed(){
+		destroyed() {
 			clearTimeout(this.timeId);
 		},
 		methods: {
-			async anifeed(){
-				
+			async anifeed() {
+
 				this.clickOverlay = true;
 				await uni.$tm.sleep(50)
 				this.clickOverlay = false;
@@ -166,8 +173,8 @@
 					}, wait);
 				}
 			},
-			async maskClick(){
-				
+			async maskClick() {
+
 				await this.anifeed();
 			},
 			hide() {
@@ -202,15 +209,17 @@
 			max-width: 64%;
 			backdrop-filter: blur(10px);
 			background-color: rgba(255, 255, 255, 0.75);
-			
+
 			&.black {
 				background-color: rgba(0, 0, 0, 0.90) !important;
 			}
 
 			animation: outin 0.3s ease-in-out;
-			&.clickOverlay{
+
+			&.clickOverlay {
 				animation: none !important;
 			}
+
 			.load {
 				animation: load 0.5s infinite linear;
 			}

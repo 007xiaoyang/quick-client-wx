@@ -9,13 +9,15 @@
 					'https://picsum.photos/500?jv=34',
 					'https://picsum.photos/500?jv=5'
 				]"></tm-swiper>
-			<tm-search suffixIcon=" " :showRight="false" :fllowTheme="false" color="white" bg-color="pink"
-				insertColor="pink" :round="4" placeholder="产品搜索" :shadow="0" @focus="searchFocus">
+			<tm-search suffixIcon=" " :showRight="false" :fllowTheme="false" color="white"
+				:bg-color="$tm.vx.state().user.themeColor" :insertColor="$tm.vx.state().user.themeColor" :round="4"
+				placeholder="产品搜索" :shadow="0" @focus="searchFocus">
 			</tm-search>
 			<!-- sticky吸顶悬浮的菜单, 父元素必须是 mescroll -->
 			<view class="sticky-tabs">
-				<tm-tabs :bg-color="navTop > 150 ? '' : 'pink'" :color="navTop > 150 ? 'pink' : ''"
-					:active-border-color="navTop > 150 ? 'pink' : 'white'" v-model="tabIndex"
+				<tm-tabs :bg-color="navTop > 150 ? '' : $tm.vx.state().user.themeColor"
+					:color="navTop > 150 ? $tm.vx.state().user.themeColor : ''"
+					:active-border-color="navTop > 150 ? $tm.vx.state().user.themeColor : 'white'" v-model="tabIndex"
 					:list="['的ve', '二分', '阿迪斯发第三方', 'vrev']" range-key="name" align="left"></tm-tabs>
 			</view>
 

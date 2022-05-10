@@ -1,6 +1,6 @@
 <template>
 	<view class="hidden fixed fulled" :class="[$tm.vx.state().tmVuetify.black ? 'black' : 'grey-lighten-4']">
-		<tm-menubars :title="menuTitle" color="pink" :showback="false" :flat="true">
+		<tm-menubars :title="menuTitle" :color="$tm.vx.state().user.themeColor" :showback="false" :flat="true">
 			<template v-slot:left>
 				<view class="pl-10 text-size-g py-1">诚信商城</view>
 			</template>
@@ -9,27 +9,24 @@
 		<scroll-view class="center_warp" scroll-y :style="{height: bodyHeight + 'px'}">
 			<home v-if="tabIndex == 0" class="fulled-height"></home>
 			<classify v-else-if="tabIndex == 1" class="fulled-height"></classify>
-			<news v-else-if="tabIndex == 2" class="fulled-height"></news>
-			<cart v-else-if="tabIndex == 3" class="fulled-height" :bottom="cardBar"></cart>
-			<my v-else-if="tabIndex == 4" class="fulled-height"></my>
+			<cart v-else-if="tabIndex == 2" class="fulled-height" :bottom="cardBar"></cart>
+			<my v-else-if="tabIndex == 3" class="fulled-height"></my>
 		</scroll-view>
 
-		<tm-bottomnavigation class="tabbar" icon-color="pink" icon-color-grey="grey-lighten-1" :list="tabbar"
-			@change="tabBarChange"></tm-bottomnavigation>
+		<tm-bottomnavigation class="tabbar" :icon-color="$tm.vx.state().user.themeColor"
+			icon-color-grey="grey-lighten-1" :list="tabbar" @change="tabBarChange"></tm-bottomnavigation>
 	</view>
 </template>
 
 <script>
 	import Home from './home.vue'
 	import Classify from './classify.vue'
-	import News from './news.vue'
 	import Cart from './cart.vue'
 	import My from './my.vue'
 	export default {
 		components: {
 			Home,
 			Classify,
-			News,
 			Cart,
 			My
 		},
@@ -38,7 +35,7 @@
 				bodyHeight: '100%',
 				cardBar: 0,
 				menuTitle: '首页',
-				tabIndex: 3,
+				tabIndex: 0,
 				tabbar: [{
 						icon: 'icon-position-fill',
 						value: '首页',
@@ -48,15 +45,6 @@
 						icon: 'icon-smile-fill',
 						value: '分类',
 						fontSize: 25
-					},
-					{
-						icon: 'icon-clock-fill',
-						fontSize: 25,
-						value: '消息',
-						/* custom: true,
-						iconSize: 70,
-						customColor: 'pink',
-						customFontColor: 'white' */
 					},
 					{
 						icon: 'icon-clock-fill',
@@ -79,7 +67,10 @@
 		},
 		onLoad(option) {
 			console.log(option)
-
+			uni.$tm.vx.commit('user/setStateAttr', {
+				key: 'themeColor',
+				val: option.themeColor
+			});
 		},
 		methods: {
 			// 选中tab回调事件
