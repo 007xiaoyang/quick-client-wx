@@ -4,7 +4,11 @@ export default {
 	state: {
 		themeColor: 'blue',
 		token: token,
-		user: null
+		user: {
+			avatarUrl: '',
+			nickName: '',
+
+		}
 	},
 
 	getters: {},
@@ -26,9 +30,6 @@ export default {
 			} else {
 				uni.removeStorageSync('token');
 			}
-		},
-		setUserInfo(state, user = null) {
-			state.user = user;
 		}
 	},
 	actions: {

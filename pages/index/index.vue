@@ -69,7 +69,7 @@
 			console.log(option)
 			uni.$tm.vx.commit('user/setStateAttr', {
 				key: 'themeColor',
-				val: option.themeColor
+				val: option.themeColor || 'blue'
 			});
 		},
 		methods: {

@@ -11,9 +11,9 @@ module.exports = {
 	},
 	onShow() {
 		let urls = getCurrentPages();
-		if(urls.length>0){
-			let url = urls[urls.length-1].$page.fullPath
-			if(url[0]!='/') url = '/'+url;
+		if (urls.length > 0) {
+			let url = urls[urls.length - 1].$page.fullPath
+			if (url[0] != '/') url = '/' + url;
 			url = url.split('?')[0];
 			uni.$tm.vx.commit('setPageNow', url)
 		}
@@ -22,7 +22,7 @@ module.exports = {
 	onLoad() {
 		// this.$tm.vx.commit('setWxShare',{title:'hhhhh'})
 	},
-	
+
 	methods: {
 		setVueTiflyThemeBlack() {
 			let vueTifly_black = this.$tm.vx.state().tmVuetify.black
@@ -77,78 +77,100 @@ module.exports = {
 			};
 
 		},
-		$Querey(clsaaName, t, ycnum = 50,isAll) {
+		$Querey(clsaaName, t, ycnum = 50, isAll) {
 
 			return new Promise((rs, rj) => {
 
-				if(isAll==true){
-					
+				if (isAll == true) {
+
 					// #ifdef APP-VUE || APP-PLUS
 					ycnum = 60
-					uni.$tm.sleep(ycnum).then(r=>{
+					uni.$tm.sleep(ycnum).then(r => {
 						uni.createSelectorQuery().in(t ? t : this).select(clsaaName)
 							.boundingClientRect().exec(
 								function(res) {
 									rs(res)
 								})
 					})
-					
+
 					// #endif
 					// #ifdef MP
-					uni.$tm.sleep(ycnum).then(r=>{
+					uni.$tm.sleep(ycnum).then(r => {
 						uni.createSelectorQuery().in(t ? t : this).selectAll(clsaaName)
 							.boundingClientRect().exec(
 								function(res) {
 									rs(res)
 								})
 					})
-					
+
 					// #endif
 					// #ifdef H5
-					
-						uni.createSelectorQuery().in(t ? t : this).selectAll(clsaaName)
-							.boundingClientRect().exec(
-								function(res) {
-									rs(res)
-								})
-					
+
+					uni.createSelectorQuery().in(t ? t : this).selectAll(clsaaName)
+						.boundingClientRect().exec(
+							function(res) {
+								rs(res)
+							})
+
 					// #endif
-				}else{
-					
+				} else {
+
 					// #ifdef APP-VUE || APP-PLUS
 					ycnum = 60
-					uni.$tm.sleep(ycnum).then(r=>{
+					uni.$tm.sleep(ycnum).then(r => {
 						uni.createSelectorQuery().in(t ? t : this).select(clsaaName)
 							.boundingClientRect().exec(
 								function(res) {
 									rs(res)
 								})
 					})
-					
+
 					// #endif
 					// #ifdef MP
-					uni.$tm.sleep(ycnum).then(r=>{
+					uni.$tm.sleep(ycnum).then(r => {
 						uni.createSelectorQuery().in(t ? t : this).select(clsaaName)
 							.boundingClientRect().exec(
 								function(res) {
 									rs(res)
 								})
 					})
-					
+
 					// #endif
 					// #ifdef H5
-					
-						uni.createSelectorQuery().in(t ? t : this).select(clsaaName)
-							.boundingClientRect().exec(
-								function(res) {
-									rs(res)
-								})
-					
+
+					uni.createSelectorQuery().in(t ? t : this).select(clsaaName)
+						.boundingClientRect().exec(
+							function(res) {
+								rs(res)
+							})
+
 					// #endif
 				}
 				// console.log(ycnum);
 
 			})
+		},
+
+		// 跳转页面
+		pageApi(url, api = 'navigateTo', params, confirm) {
+			url += (url.indexOf('?') < 0 ? '?' : '&') + param(params)
+
+			uni[api]({
+				url,
+				success: function(res) {
+					if (!confirm || !confirm.emit) return
+					res.eventChannel.emit(confirm.emit, confirm.data)
+				}
+			})
+		},
+		// 拼接参数
+		param(data) {
+			let url = ''
+			for (var k in data) {
+				let value = data[k] !== undefined ? data[k] : ''
+				url += '&' + k + '=' + encodeURIComponent(value)
+			}
+			return url ? url.substring(1) : ''
 		}
 
 	},
