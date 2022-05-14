@@ -4,10 +4,10 @@ export default {
 	state: {
 		themeColor: 'blue',
 		token: token,
-		user: {
-			avatarUrl: '',
-			nickName: '',
-
+		user: uni.getStorageSync('quickClientUser') || {
+			shopId: '',
+			openId: '',
+			sessionKey: '',
 		}
 	},
 
@@ -23,16 +23,26 @@ export default {
 				state[param.key] = param.val;
 			}
 		},
-		login(state, token) {
-			state.token = token;
-			if (token) {
-				uni.setStorageSync('token', token);
-			} else {
-				uni.removeStorageSync('token');
-			}
-		}
+		
+		
+		login(state, shopId) {
+				return new Promise((resolve, reject) => {
+					uni.login({
+						provider: "weixin",
+						success: (res) => {
+							uni.$http.get('/wx/register', { code: res.code , shopId: shopId }, { load: false }).then(res => {
+								let userData = { shopId: res.shopId, openId: res.openId, sessionKey: res.sessionKey };
+								uni.setStorageSync('quickClientUser', userData);
+								state.user = userData;
+								resolve(userData)
+							}).catch(() => {})
+						}
+					})
+					
+				});
+			},
 	},
 	actions: {
-
+		
 	}
 }

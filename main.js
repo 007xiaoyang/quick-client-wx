@@ -8,6 +8,7 @@ Vue.use(tmVuetify)
 
 
 import $http from '@/uni_modules/zhouWei-request/js_sdk/requestConfig';
+uni.$http = $http
 Vue.prototype.$http = $http
 
 Vue.config.productionTip = false

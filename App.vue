@@ -1,18 +1,11 @@
 <script>
 	export default {
 		onLaunch: function(option) {
-			console.log('App Launch')
-
+			console.log('App Launch', option)
 			// 微信登录
-			uni.login({
-				provider: "weixin",
-				success: (res) => {
-					console.log('微信登录:', res)
-					// this.$http.get('/quick/sale/shareOrder', { code: res.code }, { load: false }).then(res => {
-
-					// }).catch(() => {})
-				}
-			})
+			if (option.query && option.query.shopId) {
+				uni.$tm.vx.commit('user/login', option.query.shopId);
+			}
 		},
 		onShow: function() {
 			console.log('App Show')

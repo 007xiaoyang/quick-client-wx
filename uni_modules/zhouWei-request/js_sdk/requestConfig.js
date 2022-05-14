@@ -2,8 +2,8 @@ import request from "./request";
 // 全局配置的请求域名
 let baseUrl = "";
 if (process.env.NODE_ENV == 'development') {
-	//baseUrl = "http://localhost:8065";
-	baseUrl = "https://quick-wx-manage-prod.bxy8888.com";
+	baseUrl = "http://localhost:8065";
+	//baseUrl = "https://quick-wx-manage-prod.bxy8888.com";
 	//baseUrl = "https://quick-wx-data-prod.bxy8888.com"
 } else {
 	baseUrl = "https://quick-wx-data-prod.bxy8888.com";
@@ -125,28 +125,7 @@ $http.requestStart = function(options) {
 			}
 		}
 	}
-	if (!uni.getStorageSync('assetToken') && options.url.indexOf('quick/shop/login') == -1 && options.url.indexOf('quick/pdf/getPdf') == -1) {
-		if (loginPopupNum <= 0) {
-			loginPopupNum++;
-			uni.showModal({
-				title: '温馨提示',
-				content: '此时此刻需要您登录喔~',
-				confirmText: "去登录",
-				cancelText: "再逛会",
-				success: function (res) {
-					loginPopupNum--;
-					if (res.confirm) {
-						uni.redirectTo({
-							url: "/pages/login"
-						});
-					}
-				}
-			});
-		}
-		return false
-	}
 	//请求前加入token
-	options.header['assetToken'] = uni.getStorageSync('assetToken');
 	return options; // return false 表示请求拦截，不会继续请求
 }
 //请求结束

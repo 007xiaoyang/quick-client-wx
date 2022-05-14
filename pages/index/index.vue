@@ -71,13 +71,18 @@
 				key: 'themeColor',
 				val: option.themeColor || 'blue'
 			});
+			
+		},
+		onShow() {
+			
 		},
 		methods: {
 			// 选中tab回调事件
-			tabBarChange(e) {
+			tabBarChange: uni.$tm.throttle(function(e) {
 				this.tabIndex = e.index;
 				this.menuTitle = e.item.value;
-			}
+			}),
+			
 		}
 	};
 </script>

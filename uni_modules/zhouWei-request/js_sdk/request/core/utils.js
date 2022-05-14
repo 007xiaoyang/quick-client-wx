@@ -18,7 +18,6 @@ export const mergeConfig = function(_this, options) {
 	}
 	
 	// 根据自己的业务进行特别处理的
-	config.url = config.url + '?assetToken=' + uni.getStorageSync('assetToken');
 	
 	if (options.method == "SPLICED") {
 		let dataStr = '';
@@ -29,7 +28,7 @@ export const mergeConfig = function(_this, options) {
 		if (dataStr !== '') {
 			dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
 		}
-		config.url = config.url + '&' + dataStr;
+		config.url = config.url + '?' + dataStr;
 		config.method = 'POST'; // 恢复请求类型
 		config.data = {}; // 拼接成功后清空参数
 	}
