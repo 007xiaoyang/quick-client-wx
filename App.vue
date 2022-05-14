@@ -6,6 +6,7 @@
 			if (option.query && option.query.shopId) {
 				uni.$tm.vx.commit('user/login', option.query.shopId);
 			}
+			console.log(uni.$tm)
 		},
 		onShow: function() {
 			console.log('App Show')

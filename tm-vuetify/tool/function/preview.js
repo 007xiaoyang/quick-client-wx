@@ -8,46 +8,46 @@
  * @param {Object} list 可以是url数组，也可以是对象，数据比如：["http:url"] or [{url:"https:url",...}]
  * @param {Object} rangKey 如果list是对象数组，需要提供url字段。
  */
-function previewImg(url,list,rangKey){
-	
-	if(!url){
+function previewImg(url, list, rangKey) {
+
+	if (!url) {
 		uni.$tm.toast("参数有误");
 		return;
 	}
-	
-	if(arguments.length==1){
+
+	if (arguments.length == 1) {
 		uni.previewImage({
-			current:url,
-			urls:list?list:[url]
+			current: url,
+			urls: list ? list : [url]
 		})
-	}else if(arguments.length===3){
-		
-		if(typeof list[0] === 'object' && typeof list[0] !== 'undefined'){
-			
+	} else if (arguments.length === 3) {
+
+		if (typeof list[0] === 'object' && typeof list[0] !== 'undefined') {
+
 			let urls = [];
-			list.forEach(item=>{
+			list.forEach(item => {
 				urls.push(item[rangKey]);
 			})
-			
+
 			uni.previewImage({
-				current:url,
-				urls:urls,
+				current: url,
+				urls: urls,
 				fail: (er) => {
 					console.warn(er)
 				}
 			})
-		}else if(typeof list[0] === 'string'){
+		} else if (typeof list[0] === 'string') {
 			uni.previewImage({
-				current:url,
-				urls:list
+				current: url,
+				urls: list
 			})
 		}
-	}else{
+	} else {
 		uni.$tm.toast("参数有误");
 	}
-	
-	
-	
+
+
+
 }
 
-export default  previewImg
+export default previewImg

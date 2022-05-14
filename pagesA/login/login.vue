@@ -8,8 +8,8 @@
 			<view class="text-size-xl text-weight-b">欢迎登录</view>
 		</view>
 
-		<view class="fulled  white round-l-15 flex-1 mt--n12 round-r-15 " :class="{'flex-center': !loginType}">
-			<view v-if="loginType" class="mt-n25">
+		<view class="fulled  white round-l-15 flex-1 mt--n12 round-r-15 ">
+			<view class="mt-n25">
 				<tm-form ref="formata" @submit="submit">
 					<view class="ma-n10">
 						<tm-input name="title" required vertical title="账号" title-class="text-weight-b"
@@ -21,26 +21,21 @@
 							v-model="form.name" :border-bottom="false" border-color="grey-lighten-1"
 							bg-color="grey-lighten-5">
 						</tm-input>
-						<view class="text-size-m text-deep-orange ml-n10 mt-10" @click="loginType= false">微信登录</view>
 					</view>
 				</tm-form>
 				<view class="px-24 mt-n15 ml-n10 mr-n10">
 					<view class="mb-n10">
-						<tm-button navtie-type="form" theme="bg-gradient-blue-accent" :round="24" block
-							:loading="loading">登录</tm-button>
+						<view class="mb-n10">
+							<tm-button navtie-type="form" theme="bg-gradient-blue-accent" :round="24" block
+								@click="loginType = true">账号登录</tm-button>
+						</view>
+						<view class="mb-n10">
+							<tm-button theme="bg-gradient-deep-purple-accent" :round="24" block
+								open-type="getPhoneNumber" @getphonenumber="getUserProfile">微信授权手机号码登录</tm-button>
+						</view>
+						<tm-button theme="bg-gradient-pink-accent" :round="24" block>返回</tm-button>
 					</view>
 				</view>
-			</view>
-			<view v-else class="flex-shrink" style="width: 80%;">
-				<view class="mb-n10">
-					<tm-button navtie-type="form" theme="bg-gradient-blue-accent" :round="24" block
-						@click="loginType = true">账号登录</tm-button>
-				</view>
-				<view class="mb-n10">
-					<tm-button theme="bg-gradient-deep-purple-accent" :round="24" block open-type="getPhoneNumber"
-						@getphonenumber="getUserProfile">授权手机号登录</tm-button>
-				</view>
-				<tm-button theme="bg-gradient-pink-accent" :round="24" block>取消授权</tm-button>
 			</view>
 		</view>
 
@@ -60,9 +55,7 @@
 				}
 			}
 		},
-		onLoad() {
-			console.log(this)
-		},
+		onLoad() {},
 		methods: {
 			// 用户授权
 			getUserProfile(e) {

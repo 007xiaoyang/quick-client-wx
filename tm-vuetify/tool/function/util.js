@@ -1,4 +1,3 @@
-
 // #ifdef H5
 var clipboardJS = require('./clipboardJS');
 
@@ -10,14 +9,14 @@ var clipboardJS = require('./clipboardJS');
  @param {Object} list 可以是url数组，也可以是对象，数据比如：["http:url"] or [{url:"https:url",...}]
  @param {Object} rangKey 如果list是对象数组，需要提供url字段。
  */
-import { previewImg } from "./preview.js"
+import previewImg from "./preview.js"
 
 /**
-* 数据分组
-* @param {Array} oArr - 原数组列表
-* @param {Number} length - 单个数组长度
-* @return {Array}  arr - 分组后的新数组
-*/
+ * 数据分组
+ * @param {Array} oArr - 原数组列表
+ * @param {Number} length - 单个数组长度
+ * @return {Array}  arr - 分组后的新数组
+ */
 function splitData(oArr = [], length = 1) {
 	let arr = [];
 	let minArr = [];
@@ -35,10 +34,10 @@ function splitData(oArr = [], length = 1) {
 }
 
 /**
-* 剩余时间格式化
-* @param {Number} t - 剩余多少秒
-* @return {Object}  format - 格式后的天时分秒对象
-*/
+ * 剩余时间格式化
+ * @param {Number} t - 剩余多少秒
+ * @return {Object}  format - 格式后的天时分秒对象
+ */
 function timeMuch(t) {
 	let format = {
 		d: '00',
@@ -59,17 +58,17 @@ function timeMuch(t) {
 	return format;
 }
 /**
-* 打电话
-* @param {String<Number>} phoneNumber - 数字字符串
-* @return {Promise}
-*/
+ * 打电话
+ * @param {String<Number>} phoneNumber - 数字字符串
+ * @return {Promise}
+ */
 function callPhone(phoneNumber = '') {
 	let num = phoneNumber.toString()
-	return new Promise((rs,rj)=>{
+	return new Promise((rs, rj) => {
 		uni.makePhoneCall({
 			phoneNumber: num,
-			success:()=> rs(),
-			fail:(err)=> rj(err)
+			success: () => rs(),
+			fail: (err) => rj(err)
 		});
 	})
 }
@@ -80,16 +79,16 @@ function callPhone(phoneNumber = '') {
  * @param {Array<string>} scanType ['barCode', 'qrCode', 'datamatrix','datamatrix']
  * @returns Promise 成功返回相关数据结构
  */
-function scanCode(onlyFromCamera = true, scanType = ['barCode', 'qrCode', 'datamatrix','datamatrix']){
+function scanCode(onlyFromCamera = true, scanType = ['barCode', 'qrCode', 'datamatrix', 'datamatrix']) {
 	// #ifdef H5
 	return Promise.reject('不支持H5');
 	// #endif
-	return new Promise((rs,rj)=>{
+	return new Promise((rs, rj) => {
 		uni.scanCode({
 			onlyFromCamera: onlyFromCamera,
 			scanType: scanType,
 			success: (res) => rs(res),
-			fail:(error)=>rj(error)
+			fail: (error) => rj(error)
 		});
 	})
 }
@@ -99,32 +98,32 @@ function scanCode(onlyFromCamera = true, scanType = ['barCode', 'qrCode', 'datam
  * @param {String} data 
  * @returns Promise true/false
  */
-function setClipboardData(data){
+function setClipboardData(data) {
 
 	// #ifndef H5
-	return new Promise((rs,rj)=>{
+	return new Promise((rs, rj) => {
 		uni.setClipboardData({
 			data: data,
-			success:()=>rs(true),
-			fail:(error)=>rj(error)
+			success: () => rs(true),
+			fail: (error) => rj(error)
 		});
 	})
 	// #endif
 	// #ifdef H5
-	return new Promise((rs,rj)=>{
+	return new Promise((rs, rj) => {
 		let btn = document.createElement('button');
 		btn.style.display = 'none';
-		btn.className='hi-test-hi';
+		btn.className = 'hi-test-hi';
 		document.body.appendChild(btn);
 		clipboardJS = clipboardJS.bind(window);
 		let cb = new clipboardJS('.hi-test-hi', {
 			text: () => data
 		})
-		
-		cb.on('success', function (res) {
+
+		cb.on('success', function(res) {
 			rs(true);
 		})
-		cb.on('error', function (err) {
+		cb.on('error', function(err) {
 			rj(err)
 		})
 		btn.click = btn.click.bind(window.document.body.querySelector('.hi-test-hi'))
@@ -136,7 +135,7 @@ function setClipboardData(data){
  * 获取剪切板内容
  * @returns Promise 剪切板内容
  */
-function getClipboardData(){
+function getClipboardData() {
 	// #ifndef H5
 	return new Promise((rs, rj) => {
 		uni.getClipboardData({
@@ -220,15 +219,15 @@ function httpUrlAddKey(uri, key, value) {
 }
 
 export default {
-	previewImg,//预览图片。
-	splitData,//数据分组
-	timeMuch,//剩余时间格式化
-	callPhone,//打电话
-	scanCode,//调起客户端相机扫码。
+	previewImg, //预览图片。
+	splitData, //数据分组
+	timeMuch, //剩余时间格式化
+	callPhone, //打电话
+	scanCode, //调起客户端相机扫码。
 	setClipboardData, //设置剪切板内容。
-	getClipboardData,//获取剪切板内容
-	setCookie,//设置cookie数据
-	delCookie,//删除一个本地cookie
-	getCookie,//获取一个cookie数据
-	httpUrlAddKey,//向地址连接追加参数
+	getClipboardData, //获取剪切板内容
+	setCookie, //设置cookie数据
+	delCookie, //删除一个本地cookie
+	getCookie, //获取一个cookie数据
+	httpUrlAddKey, //向地址连接追加参数
 }
