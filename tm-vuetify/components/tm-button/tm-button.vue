@@ -11,6 +11,7 @@
 				@getphonenumber="getphonenumber"
 				@launchapp="launchapp"
 				@opensetting="opensetting"
+				@chooseavatar="chooseavatar"
 				@click="onclick"
 				@longpress="$emit('longpress', $event)"
 				@touchcancel="$emit('touchcancel', $event)"
@@ -540,6 +541,9 @@ export default {
 		},
 		opensetting() {
 			this.$emit('opensetting', ...arguments);
+		},
+		chooseavatar() {
+			this.$emit('chooseavatar', ...arguments);
 		}
 	}
 };

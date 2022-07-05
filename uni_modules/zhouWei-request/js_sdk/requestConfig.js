@@ -16,7 +16,7 @@ let $http = new request({
 	//服务器本地上传文件地址
 	fileUrl: baseUrl,
 	// 服务器上传图片默认url
-	defaultUploadUrl: "/blade-resource/resource/aliyun/oss/upImgFile",
+	defaultUploadUrl: "/upload/wx",
 	//设置请求头（如果使用报错跨域问题，可能是content-type请求类型和后台那边设置的不一致）
 	header: {
 		'content-type': 'application/json;charset=UTF-8'
@@ -90,10 +90,19 @@ $http.requestStart = function(options) {
 	if (options.load) {
 		if (requestNum <= 0) {
 			//打开加载动画
-			uni.showLoading({
-				title: options.loading || '加载中...',
-				mask: true
-			});
+			if (options.that) {
+				options.that.$refs.toast.show({
+					showBody: false,
+					mask: true,
+					model: 'load'
+				});
+			} else {
+				uni.showLoading({
+					title: options.loading || '加载中...',
+					mask: true
+				});
+			}
+			
 		}
 		requestNum += 1;
 	}
@@ -134,7 +143,12 @@ $http.requestEnd = function(options) {
 	if (options.load) {
 		requestNum = requestNum - 1;
 		if (requestNum <= 0) {
-			uni.hideLoading();
+			if (options.that) {
+				options.that.$refs.toast.hide()
+			} else {
+				uni.hideLoading();
+			}
+			
 		}
 	}
 }

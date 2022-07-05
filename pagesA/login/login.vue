@@ -12,30 +12,24 @@
 			<view class="mt-n25">
 				<tm-form ref="formata" @submit="submit">
 					<view class="ma-n10">
-						<tm-input name="title" required vertical title="账号" title-class="text-weight-b"
-							v-model="form.name" :border-bottom="false" border-color="grey-lighten-1"
+						<tm-input name="phone" required vertical title="账号" title-class="text-weight-b"
+							v-model="form.phone" :border-bottom="false" border-color="grey-lighten-1"
 							bg-color="grey-lighten-5">
 						</tm-input>
 
-						<tm-input name="title" required vertical title="密码" title-class="text-weight-b"
-							v-model="form.name" :border-bottom="false" border-color="grey-lighten-1"
+						<tm-input name="password" required vertical title="密码" title-class="text-weight-b"
+							v-model="form.password" :border-bottom="false" border-color="grey-lighten-1"
 							bg-color="grey-lighten-5">
 						</tm-input>
+						<view class="text-size-s text-red mt-25 pl-n8">温馨提示</view>
+						<view class="text-size-s text-red mt-10 pl-n8">使用账号密码登录的，手机号必须已经关联过客户</view>
+					</view>
+					<view class="px-24 mt-n15 ml-n10 mr-n10">
+						<view class="mb-n10">
+							<tm-button navtie-type="form" theme="bg-gradient-blue-accent" :round="24" block>登录</tm-button>
+						</view>
 					</view>
 				</tm-form>
-				<view class="px-24 mt-n15 ml-n10 mr-n10">
-					<view class="mb-n10">
-						<view class="mb-n10">
-							<tm-button navtie-type="form" theme="bg-gradient-blue-accent" :round="24" block
-								@click="loginType = true">账号登录</tm-button>
-						</view>
-						<view class="mb-n10">
-							<tm-button theme="bg-gradient-deep-purple-accent" :round="24" block
-								open-type="getPhoneNumber" @getphonenumber="getUserProfile">微信授权手机号码登录</tm-button>
-						</view>
-						<tm-button theme="bg-gradient-pink-accent" :round="24" block>返回</tm-button>
-					</view>
-				</view>
 			</view>
 		</view>
 
@@ -51,16 +45,31 @@
 				loginType: false, // 登录类型，1=授权登录，2密码登录
 				loading: false,
 				form: {
+					phone: '',
+					password: '',
 					name: ''
 				}
 			}
 		},
 		onLoad() {},
 		methods: {
-			// 用户授权
-			getUserProfile(e) {
-				console.log(e)
-			}
+			// 用户授权登录
+			submit: uni.$tm.throttle(function(row) {
+				if(row === false) return;
+				this.$refs.toast.show({
+					showBody: false,
+					mask: true,
+					model: 'load',
+					label: '正在登录中'
+				});
+				row.userId = uni.$tm.vx.state().user.userInfo.userId;
+				row.shopId = uni.$tm.vx.state().user.userInfo.shopId;
+				uni.$http.post('/wx/login', row, { load: false }).then(res => {
+					uni.$tm.vx.actions('user/getUserInfo', row.userId );
+					this.$refs.toast.hide();
+					this.pageApi('/pages/index/index');
+				}).catch(() => { this.$refs.toast.hide() })
+			}),
 		}
 	}
 </script>

@@ -27,7 +27,7 @@
 								<tm-icons v-if="group" :color="color_tmeme" :name="!showContent ? 'icon-caret-right' : 'icon-sort-down'" :size="24"></tm-icons>
 							</slot>
 						</view>
-						<view class="tm-content  flex-col" style="width: 90%;">
+						<view class="tm-content  flex-col" style="width: 90%;" @click.stop="contentClick">
 							<view
 							class="fulled flex-shrink"
 								:class="[disabled===true?' text-grey-darken-1 ':(black_tmeme ? 'text-white' : `text-${titleColor}`)]"
@@ -351,6 +351,9 @@ export default {
 			this.$nextTick(function(){
 				this.pz_themeCus = {...this.pz_themeCus,...val};
 			})
+		},
+		contentClick() {
+			this.$emit('content');
 		}
 	}
 };

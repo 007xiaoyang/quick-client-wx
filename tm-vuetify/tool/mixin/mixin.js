@@ -6,6 +6,16 @@ module.exports = {
 			tmVueTifly_pages: '',
 		}
 	},
+	
+	computed: {
+		hidePhone() {
+			return function(phone) {
+				if (!phone) return '';
+				var reg = /^(\d{3})\d{4}(\d{4})$/;
+				return phone.replace(reg, "$1****$2");
+			}
+		}
+	},
 	created() {
 		this.setVueTiflyThemeBlack();
 	},
@@ -153,7 +163,7 @@ module.exports = {
 
 		// 跳转页面
 		pageApi(url, api = 'navigateTo', params, confirm) {
-			url += (url.indexOf('?') < 0 ? '?' : '&') + param(params)
+			url += (url.indexOf('?') < 0 ? '?' : '&') + this.param(params)
 
 			uni[api]({
 				url,
@@ -163,6 +173,8 @@ module.exports = {
 				}
 			})
 		},
+		
+		
 		// 拼接参数
 		param(data) {
 			let url = ''

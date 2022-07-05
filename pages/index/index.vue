@@ -1,8 +1,10 @@
 <template>
 	<view class="hidden fixed fulled" :class="[$tm.vx.state().tmVuetify.black ? 'black' : 'grey-lighten-4']">
-		<tm-menubars :title="menuTitle" :color="$tm.vx.state().user.themeColor" :showback="false" :flat="true">
+		<tm-menubars :title="$tm.vx.state().user.userInfo.shopName" :color="$tm.vx.state().user.themeColor" :showback="false" :flat="true">
 			<template v-slot:left>
-				<view class="pl-10 text-size-g py-1">诚信商城</view>
+				<view class="pl-10 text-size-g py-1" v-show="tabIndex != 3">
+					<image :src="$tm.vx.state().user.userInfo.logo || '/static/logo.jpg'" style="width: 40px; height: 40px; border-radius: 50%;"></image>
+				</view>
 			</template>
 		</tm-menubars>
 
@@ -35,7 +37,7 @@
 				bodyHeight: '100%',
 				cardBar: 0,
 				menuTitle: '首页',
-				tabIndex: 0,
+				tabIndex: 3,
 				tabbar: [{
 						icon: 'icon-position-fill',
 						value: '首页',
@@ -66,15 +68,8 @@
 				uni.upx2px(52 + 46));
 		},
 		onLoad(option) {
-			console.log(option)
-			uni.$tm.vx.commit('user/setStateAttr', {
-				key: 'themeColor',
-				val: option.themeColor || 'blue'
-			});
-			
 		},
 		onShow() {
-			
 		},
 		methods: {
 			// 选中tab回调事件

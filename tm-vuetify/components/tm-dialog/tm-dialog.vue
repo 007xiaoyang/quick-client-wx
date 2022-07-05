@@ -21,7 +21,7 @@
 							<view >
 								<text :class="[black_tmeme ? 'text-white' : 'text-grey-darken-3']">{{ content }}</text>
 								<view v-if="model == 'confirm'" class="pt-24">
-									<tm-input bg-color="grey-lighten-5" @input="suren" :black="black_tmeme" v-model="inputValSd" :border-bottom="false" :flat="true"></tm-input>
+									<tm-input bg-color="grey-lighten-5" :inputType="inputType" @input="suren" :black="black_tmeme" v-model="inputValSd" :border-bottom="false" adjust-position :flat="true"></tm-input>
 								</view>
 							</view>
 						</slot>
@@ -218,6 +218,10 @@ export default {
 		showClose: {
 			type: Boolean | String,
 			default: false
+		},
+		inputType: {
+			type: String,
+			default: 'text'
 		}
 	},
 	computed: {

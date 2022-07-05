@@ -3,7 +3,8 @@
 		<scroll-view scroll-y :style="{
 				height:activeHeight+'px',
 				width:activeWidth+'px',
-			}">
+			}"
+			:class="bgColor">
 			<tm-listitem  :disabled="item['disabled']==true?true:false" :black="black_tmeme"
 			@click="change(index)" 
 			v-for="(item,index) in formaData" :key='index'
@@ -16,7 +17,7 @@
 			round="0" shadow="0"
 			>
 			<tm-badges color='red' :fllowTheme="false" :offset="[12,-10]" v-if="item.dot>0&&dot" :dot="false" :label="item.dot"></tm-badges>
-			<view class="" >
+			<view class="" @click.stop="change(index)" >
 				<text :class="[`text-${activeIndex==index?color_tmeme:fontColor}`,item['disabled']?'opacity-3':'']">{{item[rangKey]}}</text>
 			</view>
 			</tm-listitem>
@@ -166,6 +167,7 @@
 			let t = this;
 			this.$nextTick(async function() {
 				this.activeHeight = uni.upx2px(this.height);
+				console.log(this.activeHeight)
 				if (!this.activeHeight) {
 					let wsz = await this.$Querey(".tm-sliderNav",this).catch(e=>{})
 					this.activeHeight = wsz[0].height||250;

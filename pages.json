@@ -14,9 +14,14 @@
 	],
 	"subPackages": [{
 		"root": "pagesA",
-		"pages": [{
+		"pages": [
+			{
 			"path": "login/login"
-		}]
+			}
+			,{
+				"path": "setting"
+			}
+		]
 	}],
 
 	"globalStyle": {

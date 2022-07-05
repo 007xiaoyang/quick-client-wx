@@ -1,24 +1,24 @@
 <template>
-	<view class="page-warp">
+	<view class="page-warp overflow">
 
 		<view class="top-warp">
-			<view class="">
+			<!-- <view class="">
 				<tm-search :bgColor="$tm.vx.state().user.themeColor" :insertColor="$tm.vx.state().user.themeColor"
 					align="center" :showRight="false" :round="24" padding="pb-12"></tm-search>
-			</view>
-			<tm-tabs :color="$tm.vx.state().user.themeColor" v-model="tabIndex" :list="tabs" align="left"
-				range-key="text" :active-border-color="$tm.vx.state().user.themeColor"></tm-tabs>
+			</view> -->
+			<!-- <tm-tabs :color="$tm.vx.state().user.themeColor" v-model="tabIndex" :list="tabsGoods" align="left"
+				range-key="categoryName" :active-border-color="$tm.vx.state().user.themeColor"></tm-tabs> -->
 		</view>
 
 		<view class="center-warp">
 			<!-- 左边 -->
-			<scroll-view class="left-warp grey-lighten-3" :scroll-y="true">
-				<tm-sliderNav :round="0" :color="$tm.vx.state().user.themeColor" textOverflow="text-overflow"
-					:width="180" @change="change" rang-key="text" :list="tabs" text bg-color="grey-lighten-3">
-				</tm-sliderNav>
-			</scroll-view>
+			<tm-sliderNav :round="0" :color="$tm.vx.state().user.themeColor" textOverflow="text-overflow"
+				:width="180" @change="change" rang-key="categoryName" :list="tabsGoods" text bg-color="grey-lighten-3">
+			</tm-sliderNav>
 
 			<view class="right-warp">
+				<tm-tabs :color="$tm.vx.state().user.themeColor" v-model="tabIndex" :list="tabsGoods[tabIndex].children" align="left"
+					range-key="categoryName" :active-border-color="$tm.vx.state().user.themeColor"></tm-tabs>
 				<!--右边 :fixed="false", 高度跟随父元素 (不在组件上定义class,避免部分小程序平台编译丢失, 如支付宝,钉钉小程序) -->
 				<mescroll-uni :fixed="false" ref="mescrollRef" @init="mescrollInit" @down="downCallback"
 					@up="upCallback">
@@ -35,20 +35,19 @@
 		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
-				goods: [], // 数据列表
-				tabs: [{
-						text: '苏州'
-					},
-					{
-						text: '北京'
-					},
-				],
+				tabsGoods: [],
 				tabIndex: 0 // tab下标
 			}
 		},
 		methods: {
 			upCallback(page) {
+				
 				// tabs异步获取
+				const {clientId, shopId} = uni.$tm.vx.state().user.userInfo
+				uni.$http.get('/wx/goods/getCategoryGoodsList', {clientId: clientId, shopId: shopId }, {that: this}).then(res => {
+					console.log(res)
+					this.tabsGoods = res;
+				}).catch(() => {})
 				this.mescroll.endSuccess(0);
 				/* if(this.tabs.length == 0){
 					apiGetTabs().then(res=>{

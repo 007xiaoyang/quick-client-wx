@@ -1,18 +1,19 @@
 <script>
 	export default {
-		onLaunch: function(option) {
-			console.log('App Launch', option)
+		onLaunch: async function(option) {
 			// 微信登录
 			if (option.query && option.query.shopId) {
-				uni.$tm.vx.commit('user/login', option.query.shopId);
+				uni.$tm.vx.commit('user/setStateAttr', {
+					key: 'themeColor',
+					val: option.query.themeColor || 'blue'
+				});
+				const userId = await uni.$tm.vx.actions('user/register', option.query);
+				uni.$tm.vx.actions('user/getUserInfo', userId);
 			}
-			console.log(uni.$tm)
 		},
 		onShow: function() {
-			console.log('App Show')
 		},
 		onHide: function() {
-			console.log('App Hide')
 		}
 	}
 </script>
