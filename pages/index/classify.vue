@@ -16,7 +16,11 @@
 				:color="$tm.vx.state().user.themeColor"
 				textOverflow="text-overflow"
 				:width="170"
-				@change="change"
+				@change="
+					e => {
+						change('slider', e);
+					}
+				"
 				rang-key="categoryName"
 				:list="tabsGoods"
 				text
@@ -27,27 +31,58 @@
 				<tm-tabs
 					v-model="twoIndex"
 					:color="$tm.vx.state().user.themeColor"
-					:list="tabsGoods[tabIndex].children"
+					:list="tabsGoods[tabIndex].children ? tabsGoods[tabIndex].children : []"
 					align="left"
 					range-key="categoryName"
 					:active-border-color="$tm.vx.state().user.themeColor"
 				></tm-tabs>
 				<!--右边 :fixed="false", 高度跟随父元素 (不在组件上定义class,避免部分小程序平台编译丢失, 如支付宝,钉钉小程序) -->
 				<mescroll-uni :fixed="false" ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
-					<view v-for="(v, i) in 1" :key="i" class="flex mx-30 py-30 border-b-1">
-						<view class="round-2 " style="height: 135rpx; width: 135rpx;"><tm-images :round="2" src="https://picsum.photos/300?id=7 "></tm-images></view>
-						<view class="flex-1 ml-10 flex-column">
-							<view class="text-overflow-2	text-size-n text-weight-b">产品名称</view>
-							<view class="flex-1">但是</view>
-							<view class="flex-between">
-								<view class="text-size-g text-red mt-25 text-weight-b">¥12</view>
-								<tm-stepper circular v-model="word4" :min="-10" :max="10" :step="1" :round="24" color="bg-gradient-pink-accent "></tm-stepper>
+					<block v-if="pagesShow">
+						<block v-if="tabsGoods[tabIndex].children[twoIndex]">
+							<view v-for="(v, i) in tabsGoods[tabIndex].children[twoIndex].goodsVOS" :key="i" class="flex mx-30 py-30 border-b-1">
+								<view class="round-2 " style="height: 135rpx; width: 135rpx;"><tm-images :round="2" src="https://picsum.photos/300?id=7 "></tm-images></view>
+								<view class="flex-1 ml-10 flex-column text-overflow">
+									<view class="text-overflow-2	text-size-n text-weight-b">{{ v.goodsName }}</view>
+									<view class="my-15">
+										<tm-tags :color="$tm.vx.state().user.themeColor" size="s" model="outlined" dense @click.stop="selectSpectChange(v)">
+											{{ specsAndStorageAndUnits(v, i).name }}
+											<block v-if="isMultiple(v)"><tm-icons :size="20" name="icon-angle-down"></tm-icons></block>
+										</tm-tags>
+									</view>
+									<view class="flex-between">
+										<view class="text-size-g text-red mt-25 text-weight-b">¥12</view>
+										<block v-if="v.amount">
+											<tm-stepper
+												circular
+												v-model="tabsGoods[tabIndex].children[twoIndex].goodsVOS[i].amount"
+												:round="24"
+												disabledInput
+												color="bg-gradient-pink-accent "
+												@click="
+													e => {
+														change('stepper', e, i);
+													}
+												"
+											></tm-stepper>
+										</block>
+										<block v-else>
+											<tm-button fab icon="icon-plus" icon-size="26" theme="bg-gradient-pink-accent" size="s" dense @click="change('addStepper', i)"></tm-button>
+										</block>
+									</view>
+								</view>
 							</view>
+						</block>
+
+						<view v-if="!tabsGoods[tabIndex].children[twoIndex] || !tabsGoods[tabIndex].children[twoIndex].goodsVOS || tabsGoods[tabIndex].children[twoIndex].goodsVOS.length == 0">
+							<mescroll-empty :option="{ tip: '暂无分类产品数据' }"></mescroll-empty>
 						</view>
-					</view>
+					</block>
 				</mescroll-uni>
 			</view>
 		</view>
+
+		<tm-poup v-model="poupShow" position="bottom"></tm-poup>
 	</view>
 </template>
 
@@ -57,48 +92,74 @@ export default {
 	mixins: [MescrollMixin], // 使用mixin
 	data() {
 		return {
+			poupShow: false,
+			pagesShow: false,
 			tabsGoods: [],
 			tabIndex: 0, // tab下标
 			twoIndex: 0,
-			word4: 0
+			word4: 1
 		};
+	},
+	computed: {
+		specsAndStorageAndUnits() {
+			return function(row, index) {
+				var temp = { name: '', specsId: '', storageId: '', storageUnitsId: '' };
+				var specsData = row.specsData;
+				a: for (var i = 0; i < specsData.length; i++) {
+					for (var j = 0; j < specsData[i].specsStorage.length; j++) {
+						for (var k = 0; k < specsData[i].specsStorage[j].specsStorageUnits.length; k++) {
+							if (
+								specsData[i].specsId == specsData[i].specsStorage[j].specsId &&
+								specsData[i].specsStorage[j].storageId == specsData[i].specsStorage[j].specsStorageUnits[k].storageId
+							) {
+								temp.name = specsData[i].specsName + '/' + specsData[i].specsStorage[j].warehouseName + '/' + specsData[i].specsStorage[j].specsStorageUnits[k].unitsName;
+								temp.specsId = specsData[i].specsId;
+								temp.storageId = specsData[i].specsStorage[j].storageId;
+								temp.storageUnitsId = specsData[i].specsStorage[j].specsStorageUnits[k].storageUnitsId;
+								break a;
+							}
+						}
+					}
+				}
+				temp.name.length > 16 ? temp.name.substring(0, 17) : temp.name;
+				row.temp = temp;
+				return temp;
+			};
+		},
+		isMultiple() {
+			return function(row) {
+				if (row.specsData.length > 1) {
+					return true;
+				}
+				let bol = false;
+				a: for (var i = 0; i < row.specsData.length; i++) {
+					if (row.specsData[i].specsStorage.length > 1) {
+						bol = true;
+						break a;
+					}
+					for (var j = 0; j < row.specsData[i].specsStorage.length; j++) {
+						if (row.specsData[i].specsStorage[j].specsStorageUnits.length > 1) {
+							bol = true;
+							break a;
+						}
+					}
+				}
+				return bol;
+			};
+		}
 	},
 	methods: {
 		upCallback(page) {
 			// tabs异步获取
-			this.mescroll.endSuccess(0);
-			const { clientId, shopId } = uni.$tm.vx.state().user.userInfo;
-			// uni.$http
-			// 	.get('/wx/goods/getCategoryGoodsList', { clientId: 26, shopId: 16 })
-			// 	.then(res => {
-			// 		console.log(res);
-			// 		this.mescroll.endSuccess(res.length);
-			// 		this.tabsGoods = res;
-			// 	})
-			// 	.catch(() => {});
-
-			/* if(this.tabs.length == 0){
-					apiGetTabs().then(res=>{
-						this.tabs = res
-						this.mescroll.resetUpScroll() // 重新触发upCallback
-					}).catch(()=>{
-						this.mescroll.endErr()
-					})
-					return // 此处return,先获取tabs
-				}
-				
-				//联网加载数据
-				let keyword = this.tabs[this.tabIndex]
-				apiGoods(page.num, page.size, keyword).then(res=>{
-					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-					this.mescroll.endSuccess(res.list.length);
-					//设置列表数据
-					if(page.num == 1) this.goods = []; //如果是第一页需手动制空列表
-					this.goods=this.goods.concat(res.list); //追加新数据
-				}).catch(()=>{
-					//联网失败, 结束加载
-					this.mescroll.endErr();
-				}) */
+			uni.$http
+				.get('/wx/goods/getCategoryGoodsList', { clientId: 26, shopId: 16 })
+				.then(res => {
+					console.log(res);
+					this.mescroll.endSuccess(res.length);
+					this.tabsGoods = res;
+					this.pagesShow = true;
+				})
+				.catch(() => {});
 		},
 		// 切换菜单
 		tabChange(i) {
@@ -108,9 +169,41 @@ export default {
 				this.mescroll.resetUpScroll(); // 重置列表数据
 			}
 		},
-		change(index) {
-			this.twoIndex = 0;
-			this.tabIndex = index;
+		change(type, e, i) {
+			switch (type) {
+				case 'slider':
+					this.twoIndex = 0;
+					this.tabIndex = e;
+					break;
+				case 'stepper':
+					if (e <= 0) {
+						console.log(this.tabsGoods[this.tabIndex].children[this.twoIndex].goodsVOS[i]);
+						uni.showModal({
+							title: '温馨提示',
+							content: '确定移除购物车嘛?',
+							success: res => {
+								if (res.confirm) {
+									this.$set(this.tabsGoods[this.tabIndex].children[this.twoIndex].goodsVOS[i], 'amount', null);
+								} else {
+									this.$set(this.tabsGoods[this.tabIndex].children[this.twoIndex].goodsVOS[e], 'amount', 1);
+								}
+							}
+						});
+					}
+					break;
+				case 'addStepper':
+					this.$set(this.tabsGoods[this.tabIndex].children[this.twoIndex].goodsVOS[e], 'amount', 1);
+					break;
+				default:
+					break;
+			}
+		},
+
+		selectSpectChange(v) {
+			if (this.isMultiple(v)) {
+				console.log('挑选规格', v);
+				this.poupShow = true;
+			}
 		}
 	}
 };

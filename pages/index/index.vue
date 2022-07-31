@@ -36,7 +36,7 @@ export default {
 			bodyHeight: '100%',
 			cardBar: 0,
 			menuTitle: '首页',
-			tabIndex: 1,
+			tabIndex: 0,
 			tabbar: [
 				{
 					icon: 'icon-position-fill',
@@ -66,7 +66,9 @@ export default {
 		this.cardBar = sys.screenHeight - sys.safeArea.bottom + uni.upx2px(52 + 46);
 		this.bodyHeight = sys.screenHeight - (sys.screenHeight - sys.safeArea.bottom + (sys.statusBarHeight + 45)) - uni.upx2px(52 + 46);
 	},
-	onLoad(option) {},
+	onLoad(option) {
+		console.log(option);
+	},
 	onShow() {},
 	methods: {
 		// 选中tab回调事件

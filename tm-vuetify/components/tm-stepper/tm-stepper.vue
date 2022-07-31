@@ -192,7 +192,6 @@ export default {
 	},
 	watch: {
 		value: function(val) {
-			console.log('vatch:', val);
 			this.jianchData(parseFloat(val));
 		}
 	},
@@ -287,6 +286,7 @@ export default {
 				this.$emit('input', this.setVal);
 				this.$emit('update:value', this.setVal);
 				this.$emit('change', this.setVal);
+				this.$emit('click', this.setVal);
 			});
 		},
 		inputVal(e) {

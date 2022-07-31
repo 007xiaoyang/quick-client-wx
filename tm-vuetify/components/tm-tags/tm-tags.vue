@@ -1,9 +1,11 @@
 <template>
-	<view v-if="show" class="tm-tags d-inline-block " :class="[dense?'':'ma-10',
-	size == 'xs' ? 'tm-tags-xs' : '',aniOpen?'showClose':''
-	]">
+	<view
+		v-if="show"
+		class="tm-tags d-inline-block "
+		:class="[dense ? '' : 'ma-10', size == 'xs' ? 'tm-tags-xs' : '', aniOpen ? 'showClose' : '', textOverflow ? 'text-overflow-2' : '']"
+	>
 		<view
-			@click="$emit('click',$event)"
+			@click="$emit('click', $event)"
 			class="tm-tags-item relative  flex-center "
 			:class="[
 				size == 'xs' ? 'px-6 py-2 text-size-xxs' : '',
@@ -12,16 +14,16 @@
 				size == 'm' ? 'px-15 py-6 text-size-s' : '',
 				size == 'g' ? 'px-24 py-8 text-size-n' : '',
 				size == 'lg' ? 'px-32 py-8 text-size-n' : '',
-				color_tmeme,black_tmeme?'bk':'',
+				color_tmeme,
+				black_tmeme ? 'bk' : '',
 				model !== 'model' ? model : '',
 				`round-${rounded ? 24 : round}`,
-				`shadow-${model == 'fill' ? shadow : 0}`
+				`shadow-${model == 'fill' ? shadow : 0}`,
+				textOverflow ? 't-overflow' : ''
 			]"
 		>
-			<view   v-if="showClose" :class="[color_tmeme,black_tmeme?'bk':'',aniOn?'aniOn':'']" class="tm-tags-close   flex-center border-white-a-2 rounded ">
-				<view @click.stop="closeTags" style="transform: scale(0.7);">
-					<tm-icons color="white" dense name="icon-times" :size="22"></tm-icons>
-				</view>
+			<view v-if="showClose" :class="[color_tmeme, black_tmeme ? 'bk' : '', aniOn ? 'aniOn' : '']" class="tm-tags-close   flex-center border-white-a-2 rounded ">
+				<view @click.stop="closeTags" style="transform: scale(0.7);"><tm-icons color="white" dense name="icon-times" :size="22"></tm-icons></view>
 			</view>
 			<slot></slot>
 		</view>
@@ -42,9 +44,9 @@
  * @property {Boolean} dense = [] ,默认：false，是否去除边距间隙
  * @property {Function} close 关闭时触发。
  */
-	import tmIcons from "@/tm-vuetify/components/tm-icons/tm-icons.vue"
-	export default {
-		components:{tmIcons},
+import tmIcons from '@/tm-vuetify/components/tm-icons/tm-icons.vue';
+export default {
+	components: { tmIcons },
 	name: 'tm-tags',
 	props: {
 		size: {
@@ -77,21 +79,25 @@
 		},
 		// 是否打开关闭的抖动动画
 		aniOn: {
-			type: Boolean|String,
+			type: Boolean | String,
 			default: false
 		},
 		black: {
-			type: Boolean|String,
+			type: Boolean | String,
 			default: null
 		},
-		dense:{
-			type:Boolean|String,
-			default:false
+		dense: {
+			type: Boolean | String,
+			default: false
 		},
 		// 跟随主题色的改变而改变。
-		fllowTheme:{
-			type:Boolean|String,
-			default:true
+		fllowTheme: {
+			type: Boolean | String,
+			default: true
+		},
+		textOverflow: {
+			type: Boolean | String,
+			default: false
 		}
 	},
 	computed: {
@@ -99,8 +105,8 @@
 			if (this.black !== null) return this.black;
 			return this.$tm.vx.state().tmVuetify.black;
 		},
-		color_tmeme:function(){
-			if(this.$tm.vx.state().tmVuetify.color!==null&&this.$tm.vx.state().tmVuetify.color && this.fllowTheme){
+		color_tmeme: function() {
+			if (this.$tm.vx.state().tmVuetify.color !== null && this.$tm.vx.state().tmVuetify.color && this.fllowTheme) {
 				return this.$tm.vx.state().tmVuetify.color;
 			}
 			return this.color;
@@ -117,20 +123,19 @@
 	data() {
 		return {
 			show: true,
-			aniOpen:false,
+			aniOpen: false
 		};
 	},
 	methods: {
 		closeTags() {
 			let t = this;
-			if(this.aniOpen) return;
-			this.aniOpen=true;
-			uni.$tm.sleep(250).then(()=>{
+			if (this.aniOpen) return;
+			this.aniOpen = true;
+			uni.$tm.sleep(250).then(() => {
 				t.show = false;
 				t.aniOpen = false;
 				t.$emit('close');
-			})
-			
+			});
 		}
 	}
 };
@@ -138,13 +143,13 @@
 
 <style lang="scss" scoped>
 .tm-tags {
-	&.tm-tags-xs{
+	&.tm-tags-xs {
 		// #ifdef H5
 		transform: scale(0.8);
 		// #endif
 	}
-	&.showClose{
-		animation:showClose 0.3s linear ;
+	&.showClose {
+		animation: showClose 0.3s linear;
 	}
 	.tm-tags-close {
 		position: absolute;
@@ -154,38 +159,46 @@
 		height: 32rpx;
 		line-height: 0;
 		vertical-align: middle;
-		&.aniOn{
-			animation:doudong 0.5s linear infinite;
+		&.aniOn {
+			animation: doudong 0.5s linear infinite;
 		}
-		
 	}
 }
 @keyframes showClose {
-	0%{
+	0% {
 		transform: scale(1);
 		opacity: 1;
 	}
-	100%{
+	100% {
 		transform: scale(0.1);
 		opacity: 0;
 	}
 }
 
 @keyframes doudong {
-	0%{
+	0% {
 		transform: rotate(-3deg) translateX(4rpx) translateY(4rpx);
 	}
-	25%{
+	25% {
 		transform: rotate(0deg) translateX(-4rpx) translateY(-4rpx);
 	}
-	50%{
+	50% {
 		transform: rotate(0deg) translateX(0rpx) translateY(-4rpx);
 	}
-	75%{
+	75% {
 		transform: rotate(0deg) translateX(0rpx) translateY(4rpx);
 	}
-	100%{
+	100% {
 		transform: rotate(-3deg) translateX(4rpx) translateY(4rpx);
 	}
+}
+.t-overflow {
+	display: -webkit-box;
+	white-space: inherit;
+	-ms-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
 }
 </style>

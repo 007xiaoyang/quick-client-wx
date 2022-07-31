@@ -15828,12 +15828,19 @@
 .lspacin-5 {
 	letter-spacing: 5rpx;
 }
+
 .lspacin-10 {
 	letter-spacing: 10rpx;
 }
+
 .lspacin-15 {
 	letter-spacing: 15rpx;
 }
+
 .lspacin-20 {
 	letter-spacing: 20rpx;
+}
+
+.w-auto {
+	width: auto !important;
 }
